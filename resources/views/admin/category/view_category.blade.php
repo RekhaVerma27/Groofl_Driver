@@ -57,11 +57,12 @@
                               <table id="table_id" class="table table-bordered table-striped table-hover">
                                  <thead>
                                     <tr class="info">
-                                       <th>Id</th>
+                                       <th>ID</th>
                                        <th>Category Name</th>
-                                       <th>Category Image</th>
+                                       <th>Parent ID</th>
+                                       <th>Url</th>
                                        <th>Status</th>
-                                       <th>Action</th>
+                                       <th>Actions</th>
                                     </tr>
                                  </thead>
                                  <tbody>
@@ -69,11 +70,9 @@
                                     <tr>
                                     <td>{{$category->id}}</td>
                                     <td>{{$category->category_name}}</td>
-                                    <td>
-                                    @if(!empty($category->image))
-                                       <img src="{{ url('/upload/category/'.$category->image) }}" style="width: 100px;">
-                                    @endif
-                                 </td>
+                                    <td>{{$category->parent_id}}</td>
+                                    <td>{{$category->url}}</td>
+                                    
      
       <td>
       <input type="checkbox" class="CategoryStatus btn btn-success" rel="{{$category->id}}" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" @if($category['status']=="1") checked @endif>

@@ -16,33 +16,17 @@ class CategoryController extends Controller
             $data = $request->all();
 
             $category = new Category;
-            $category->category_name = $data['category_name'];
 
-            //Upload image
-
-            if($request->hasFile('image'))
-            {
-                $img_tmp = $request->file('image');             // isko echo karke check kar sakte hai
-
-                if($img_tmp->isValid())
-                {
-                    //image path code
-                    $extension = $img_tmp->getClientOriginalExtension();
-                    $filename  = rand(111,99999).'.'.$extension;
-                    $img_path  = 'upload/category/'.$filename;
-
-                    //Image Size
-                    Image::make($img_tmp)->resize(500,500)->save($img_path);
-
-                    $category->image = $filename;
-                }
-            }
-
+            $category->category_name        = $data['category_name'];
+            $category->parent_id            = $data['parent_id'];
+            $category->url                  = $data['url'];
+            $category->description          = $data['category_description'];
             $category->save();
 
             return redirect('/view-category')->with('flash_message_success','Category has been Successfully Added!!'); 
         }
-    	return view('admin.category.add_category');
+        $levels = Category::where(['parent_id'=>0, 'status'=>1])->get();
+    	return view('admin.category.add_category',compact('levels'));
     }
 
     public function viewCategory()
@@ -64,34 +48,18 @@ class CategoryController extends Controller
             $data = $request->all();
             // echo "<pre>"; print_r($data);die;
 
-            if($request->hasFile('image'))
-            {
-                $img_tmp = $request->file('image');             
-
-                if($img_tmp->isValid())
-                {
-                    //image path code
-                    $extension = $img_tmp->getClientOriginalExtension();
-                    $filename  = rand(111,99999).'.'.$extension;
-                    $img_path  = 'upload/category/'.$filename;
-
-                    //Image Size
-                    Image::make($img_tmp)->resize(500,500)->save($img_path);
-                }
-            } 
-            else
-            {
-                $filename = $data['current_image']; 
-            }
 
             Category::where(['id'=>$id])->update([
-                                                    'category_name'=>$data['category_name'],
-                                                    'image'=>$filename
-                                                ]);
+                                                'category_name'=>$data['category_name'],
+                                                'parent_id'=>$data['parent_id'],
+                                                'description'=>$data['category_description'],
+                                                'url'=>$data['url']
+            ]);
             return redirect('/view-category')->with('flash_message_success','Category has been updated!!');
         }
+        $levels = Category::where(['parent_id'=>0, 'status'=>1])->get();
         $categoryDetails = Category::where(['id'=>$id])->first();
-        return view('admin.category.edit_category')->with(compact('categoryDetails'));
+        return view('admin.category.edit_category')->with(compact('categoryDetails','levels'));
     }
 
     public function deleteCategory($id=null)

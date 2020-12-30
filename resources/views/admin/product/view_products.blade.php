@@ -59,11 +59,12 @@
 	                        <thead>
 	                           <tr class="info">
 	                              <th>ID</th>
-	                              <th>Category</th>
+	                              <th>Category ID</th>
+	                              <!-- <th>Category</th> -->
 	                              <th>Product Name</th>
 	                              <th>Product Quantity</th>
 	                              <th>Product Price</th>
-	                              <th>ProductImage</th>
+	                              <th>Product Image</th>
 	                              <th>Status</th>
 	                              <th>Actions</th>
 	                           </tr>
@@ -73,7 +74,8 @@
 	                           <tr>
 	                              <!-- <td><img src="assets/dist/img/w1.png" class="img-circle" alt="User Image" width="50" height="50"> </td> -->
 	                              <td>{{ $product->id }}</td>
-	                              <td>{{$product->category}}</td>
+	                              <td>{{ $product->category_id }}</td>
+	                              <!-- <td>{{ $product->category_name}}</td> -->
 	                              <td>{{ $product->product_name }}</td>
 	                              <td>{{ $product->product_quantity }}</td>
 	                              <td>{{ $product->product_price }}</td>

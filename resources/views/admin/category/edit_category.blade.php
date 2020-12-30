@@ -14,47 +14,54 @@
                </div>
             </section>
             <!-- Main content -->
-            <section class="content">
-               <div class="row">
-                  <!-- Form controls -->
-                  <div class="col-sm-12">
-                     <div class="panel panel-bd lobidrag">
-                        <div class="panel-heading">
-                           <div class="btn-group" id="buttonlist"> 
-                              <a class="btn btn-add " href="{{url('/view-category')}}"> 
-                              <i class="fa fa-list" ></i>View Categories </a>  
-                           </div>
-                        </div>
-                        <div class="panel-body">
-                           <form class="col-sm-6" method="post" action="{{url('/edit-category/'.$categoryDetails->id)}}" enctype="multipart/form-data">@csrf
-                              
-                              <div class="form-group">
-                                 <label>Category Name</label>
-                                 <input type="text" name="category_name" value="{{$categoryDetails->category_name}}" class="form-control" placeholder="Enter Category Name" name="name" required>
+                  <section class="content">
+                     <div class="row">
+                        <!-- Form controls -->
+                        <div class="col-sm-12">
+                           <div class="panel panel-bd lobidrag">
+                              <div class="panel-heading">
+                                 <div class="btn-group" id="buttonlist"> 
+                                    <a class="btn btn-add " href="{{ url('/view-category') }}"> 
+                                    <i class="fa fa-list"></i>  View Categories </a>  
+                                 </div>
                               </div>
-
-                              <div class="form-group">
-                           <label>Category Image</label>
-                           <input type="file" name="image">
-                           <input type="hidden" name="current_image" value="{{ $categoryDetails->image }}">
-                           @if(!empty($categoryDetails->image))
-                           <img style="width: 100px; margin-top: 10px;" src="{{url('upload/category/'.$categoryDetails->image)}}">
-                           @else
-                           <h5>No Image</h5>
-                           @endif
-                           </div>
-                              
-                              <div class="reset-button">
-                                 <input type="submit" class="btn btn-success">
-                                 
+                              <div class="panel-body">
+                                 <form method="post" action="{{ url('/edit-category/'.$categoryDetails->id) }}" class="col-sm-6">
+                                    @csrf
+                                    <div class="form-group">
+                                       <label>Category Name</label>
+                                       <input type="text" name="category_name" id="category_name" class="form-control" value="{{ $categoryDetails->category_name }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                       <label>Parent Category</label>
+                                       <select name="parent_id" id="parent_id" class="form-control">
+                                          <option value="0">Parent Category</option>
+                                          @foreach($levels as $val)
+                                             <option value="{{$val->id}}" 
+                                                @if($val->id==$categoryDetails->parent_id) selected @endif >
+                                                {{ $val->category_name }}
+                                             </option>
+                                          @endforeach
+                                       </select>
+                                    </div>
+                                    <div class="form-group">
+                                       <label>URL</label>
+                                       <input type="text" name="url" id="url" class="form-control" value="{{ $categoryDetails->url }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                       <label>Category Description</label>
+                                       <textarea name="category_description" id="category_description" class="form-control">{{ $categoryDetails->description }}</textarea>
+                                    </div>
+                                    <div class="reset-button">
+                                       <input type="submit" name="submit" value="Edit Category" class="btn btn-success">
+                                    </div>
+                                 </form>
                               </div>
-                           </form>
+                           </div>
                         </div>
                      </div>
-                  </div>
-               </div>
-            </section>
-            <!-- /.content -->
+                  </section>
+                  <!-- /.content -->
 </div>
 
 @endsection

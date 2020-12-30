@@ -52,15 +52,22 @@
 	                  <form method="post" action="{{ url('/add-product') }}" enctype="multipart/form-data" class="col-sm-6">
 	                  	@csrf
 
-	                  	<div class="form-group">
+	                  	{{--<div class="form-group">
 	                  	   <label>SelectCategory</label>
-	                  	   <select name="category" class="form-control">
+	                  	   <select name="category_id" class="form-control">
 	                  	   	<option selected="" disabled="">Please Select Category</option>
 	                  	   	@foreach($categories_dropdown as $categories_list)
-	                  	   	<option value="{{$categories_list->category_name}}">{{$categories_list->category_name}}</option>
+	                  	   	<option value="{{$categories_list->id}}">{{$categories_list->category_name}}</option>
 	                  	   	@endforeach
 	                  	   </select> 
-	                  	</div>
+	                  	</div>--}}
+
+	                  	<div class="form-group">
+	                        <label>Under Category</label>
+	                        <select name="category_id" id="category_id" class="form-control">
+	                        	<?php echo $categories_dropdown; ?>
+	                        </select>
+	                    </div>
 
 	                     <div class="form-group">
 	                        <label>Product Name</label>

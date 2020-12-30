@@ -249,6 +249,174 @@
             });
             //end Category Status
 
+            //start driver status
+            $(".DriverStatus").change(function(){
+               var id = $(this).attr('rel');
+               if($(this).prop("checked")==true)
+               {
+                  $.ajax({
+                     headers: {
+                        'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+                     },
+                     type : 'post',
+                     url : '/admin/update-driver-status',
+                     data : {status:'1',id:id},
+                     success:function(data){
+                        $("#message_success").show();
+                        setTimeout(function() { $("#message_success").fadeOut('slow');}, 2000);
+                     },
+                     error:function(){
+                        alert("Error");
+                     }
+                  });
+               }
+               else
+               {
+                  $.ajax({
+                     headers: {
+                        'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+                     },
+                     type : 'post',
+                     url : '/admin/update-driver-status',
+                     data : {status:'0',id:id},
+                     success:function(resp){
+                        $("#message_error").show();
+                        setTimeout(function() { $("#message_error").fadeOut('slow');}, 2000);
+                     },
+                     error:function(){
+                        alert("Error");
+                     }
+                  });
+               }
+            });
+            //end driver status
+
+            //start block driver status
+            $(".BlockDriverStatus").change(function(){
+               var id = $(this).attr('rel');
+               if($(this).prop("checked")==true)
+               {
+                  $.ajax({
+                     headers: {
+                        'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+                     },
+                     type : 'post',
+                     url : '/admin/update-block-driver-status',
+                     data : {block_status:'1',id:id},
+                     success:function(data){
+                        $("#message_success").show();
+                        setTimeout(function() { $("#message_success").fadeOut('slow');}, 2000);
+                     },
+                     error:function(){
+                        alert("Error");
+                     }
+                  });
+               }
+               else
+               {
+                  $.ajax({
+                     headers: {
+                        'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+                     },
+                     type : 'post',
+                     url : '/admin/update-block-driver-status',
+                     data : {block_status:'0',id:id},
+                     success:function(resp){
+                        $("#message_error").show();
+                        setTimeout(function() { $("#message_error").fadeOut('slow');}, 2000);
+                     },
+                     error:function(){
+                        alert("Error");
+                     }
+                  });
+               }
+            });
+            //end block driver status
+
+            //start user status
+            $(".UserStatus").change(function(){
+               var id = $(this).attr('rel');
+               if($(this).prop("checked")==true)
+               {
+                  $.ajax({
+                     headers: {
+                        'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+                     },
+                     type : 'post',
+                     url : '/admin/update-user-status',
+                     data : {status:'1',id:id},
+                     success:function(data){
+                        $("#message_success").show();
+                        setTimeout(function() { $("#message_success").fadeOut('slow');}, 2000);
+                     },
+                     error:function(){
+                        alert("Error");
+                     }
+                  });
+               }
+               else
+               {
+                  $.ajax({
+                     headers: {
+                        'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+                     },
+                     type : 'post',
+                     url : '/admin/update-user-status',
+                     data : {status:'0',id:id},
+                     success:function(resp){
+                        $("#message_error").show();
+                        setTimeout(function() { $("#message_error").fadeOut('slow');}, 2000);
+                     },
+                     error:function(){
+                        alert("Error");
+                     }
+                  });
+               }
+            });
+            //end user status
+
+            //start block user status
+            $(".BlockUserStatus").change(function(){
+               var id = $(this).attr('rel');
+               if($(this).prop("checked")==true)
+               {
+                  $.ajax({
+                     headers: {
+                        'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+                     },
+                     type : 'post',
+                     url : '/admin/update-block-user-status',
+                     data : {block_status:'1',id:id},
+                     success:function(data){
+                        $("#message_success").show();
+                        setTimeout(function() { $("#message_success").fadeOut('slow');}, 2000);
+                     },
+                     error:function(){
+                        alert("Error");
+                     }
+                  });
+               }
+               else
+               {
+                  $.ajax({
+                     headers: {
+                        'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+                     },
+                     type : 'post',
+                     url : '/admin/update-block-user-status',
+                     data : {block_status:'0',id:id},
+                     success:function(resp){
+                        $("#message_error").show();
+                        setTimeout(function() { $("#message_error").fadeOut('slow');}, 2000);
+                     },
+                     error:function(){
+                        alert("Error");
+                     }
+                  });
+               }
+            });
+            //end block user status
+
             //start Banner Status
             $(".BannerStatus").change(function(){
                var id = $(this).attr('rel');
