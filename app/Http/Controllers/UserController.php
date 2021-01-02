@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Product;
 use App\Cart;
+use App\Orders;
+use App\OrdersProduct;
 use App\Coupons;
 use App\Category;
 use Session;
@@ -92,41 +94,20 @@ class UserController extends Controller
 
     public function addtoCart(Request $request)
     {
-        // echo "kukkk"; die;
         if($request->session()->has('userSession'))
         {
-            //return "hello";
-
-            // echo $kk = Session::get('userSession'); die;
-
             $data = $request->all();
-
             // echo "<pre>"; print_r($data); die;
 
-            // if(empty(Session::get('userSession')))
-            // {
-            //    echo $data['user_email'] = '';
-            // }
-            // else
-            // {
-            //    echo $data['user_email'] = Session::get('userSession');
-            // }
-
-            $session_id = Session::get('session_id');
-
-            if(empty($session_id))
-            {
-                $session_id = Str::random(40);
-                Session::put('session_id',$session_id);
-            }
+            $id = User::where(['email'=>Session::get('userSession')])->first()->id;
 
             $countProducts = DB::table('carts')->where([
+                                                        'user_id'=>$id,
                                                         'product_id'=>$data['product_id'],
                                                         'product_name'=>$data['product_name'],
                                                         'product_price'=>$data['product_price'],
-                                                        'product_quantity'=>$data['product_quantity'],
-                                                        'session_id'=>$session_id,
-                            ])->count();
+                                                        'product_quantity'=>$data['product_quantity']
+                                                    ])->count();
             if($countProducts>0)
             {
                 return redirect()->back()->with('flash_message_error','Product Already exists in Cart!');
@@ -134,12 +115,11 @@ class UserController extends Controller
             else
             {
                 DB::table('carts')->insert([
+                                            'user_id'=>$id,
                                             'product_id'=>$data['product_id'],
                                             'product_name'=>$data['product_name'],
                                             'product_price'=>$data['product_price'],
-                                            'product_quantity'=>$data['product_quantity'],
-                                            // 'user_email'=>$data['user_email'],
-                                            'session_id'=>$session_id,
+                                            'product_quantity'=>$data['product_quantity']
                 ]);
             }
 
@@ -169,8 +149,11 @@ class UserController extends Controller
         // } 
         // else
         // {
-            $session_id = Session::get('session_id');
-            $userCart = DB::table('carts')->where(['session_id'=>$session_id])->get();
+            // $session_id = Session::get('session_id');
+            $id = User::where(['email'=>Session::get('userSession')])->first()->id;
+
+            // $userCart = DB::table('carts')->where(['session_id'=>$session_id])->get();
+            $userCart = DB::table('carts')->where(['user_id'=>$id])->get();
         // }                                       // 56 end
        
 
@@ -248,16 +231,19 @@ class UserController extends Controller
                 // $session_id = Session::get('session_id');
                 // $userCart = DB::table('cart')->where(['session_id'=>$session_id])->get(); //old
 
-                if(Auth::check())                       // extra video 56
-                {            
-                    $user_email = Auth::user()->email;
-                    $userCart = DB::table('carts')->where(['user_email'=>$user_email])->get(); 
-                } 
-                else
-                {
-                    $session_id = Session::get('session_id');
-                    $userCart = DB::table('carts')->where(['session_id'=>$session_id])->get();
-                }                                       // 56 end
+                // if(Auth::check())                       // extra video 56
+                // {            
+                //     $user_email = Auth::user()->email;
+                //     $userCart = DB::table('carts')->where(['user_email'=>$user_email])->get(); 
+                // } 
+                // else
+                // {
+                //     $session_id = Session::get('session_id');
+                //     $userCart = DB::table('carts')->where(['session_id'=>$session_id])->get();
+                // }                                       // 56 end
+
+                $id = User::where(['email'=>Session::get('userSession')])->first()->id;
+                $userCart = DB::table('carts')->where(['user_id'=>$id])->get();
 
                 $total_amount = 0;
                 foreach($userCart as $item)
@@ -325,24 +311,47 @@ class UserController extends Controller
 
     public function checkoutPage()
     {
+
         $id = User::where(['email'=>Session::get('userSession')])->first()->id;
 
+
         $addresses = DB::table('addresses')->where(['user_id'=>$id])->get();
-        // echo "<pre>"; print_r($addresses); die;
-        return view('user.checkout_page',compact('addresses'));
+
+        $userCarts = DB::table('carts')->where(['user_id'=>$id])->get();
+        // echo "<pre>"; print_r($userCarts); die;
+
+        foreach($userCarts as $key=>$products)
+        {
+            // echo $products->product_id;
+
+            $productDetails = Product::where(['id'=>$products->product_id])->first();
+            // $userCart[$key]->image = "Test";
+            $userCarts[$key]->image = $productDetails->image;
+
+        }
+
+        // $carts = Cart::where();
+        return view('user.checkout_page',compact('addresses','userCarts'));
     }
 
-    public function orderReview(Request $request)
+    public function placeOrder(Request $request)
     {
+
         // echo "rekhas"; die;
         if($request->isMethod('post'))
         {
             $data = $request->all();
             // echo "<pre>"; print_r($data); die;
 
+            if(empty($data['address_id']))
+            {
+                return redirect()->back()->with('flash_message_error','Please Choose Delivery Address!');
+            }
+
             $addressData = DB::table('addresses')->where(['id'=>$data['address_id']])->first();
             // echo $addressData->address; die;
             // echo "<pre>"; print_r($addressData); die;
+
 
             DB::table('delivery_addresses')->insert([
                                                'user_id'=>$addressData->user_id,
@@ -353,10 +362,129 @@ class UserController extends Controller
                                                'pincode'=>$addressData->pincode,
 
             ]);
-            return "Rekha";
+
+            if(empty(Session::get('CouponCode')))
+            {
+                $coupon_code = 'Not Used';
+            }
+            else
+            {
+                $coupon_code = Session::get('CouponCode');
+            }
+
+            if(empty(Session::get('CouponAmount')))
+            {
+                $coupon_amount = '0';
+            }
+            else
+            {
+                $coupon_amount = Session::get('CouponAmount');
+            }
+
+            $id = User::where(['email'=>Session::get('userSession')])->first()->id;
+
+            $order = new Orders;
+
+            $order->user_id = $id;
+            // $order->user_email = $user_email;
+            // $order->name = $shippingDetails->name;
+            $order->address         = $addressData->address;
+            $order->city            = $addressData->city;
+            $order->state           = $addressData->state;
+            $order->country         = $addressData->country;
+            $order->pincode         = $addressData->pincode;
+            $order->coupon_code     = $coupon_code;
+            $order->coupon_amount   = $coupon_amount;
+            $order->order_status    = "New";
+            $order->payment_method  = $data['payment_method'];
+            $order->grand_total     = $data['grand_total'];
+
+            $order->save();
+
+            $order_id = DB::getPdo()->lastinsertID();
+
+            $cartProducts = DB::table('carts')->where(['user_id'=>$id])->get();
+
+            foreach($cartProducts as $pro)
+            {
+                $cartPro = new OrdersProduct;
+                $cartPro->order_id = $order_id;
+                $cartPro->user_id = $id;
+                $cartPro->product_id = $pro->product_id;
+                $cartPro->product_name = $pro->product_name;
+                $cartPro->product_price = $pro->product_price;
+                $cartPro->product_quantity = $pro->product_quantity;
+                $cartPro->save();
+            }
+
+            Session::put('order_id',$order_id);
+            Session::put('grand_total',$data['grand_total']);
+            if($data['payment_method']=="cod")
+            {
+                return redirect('/thanks');
+            }
+            else
+            {
+                return redirect('/stripe');
+            }
         }
         
     }
+
+// ====================================== Start Thanks ============================
+    public function thanks()
+    {
+        // $user_email = Auth::user()->email;
+        // DB::table('cart')->where('user_email',$user_email)->delete(); 
+
+        $id = User::where(['email'=>Session::get('userSession')])->first()->id;
+        DB::table('carts')->where(['user_id'=>$id])->delete();
+
+        return view('user.thanks');
+    }
+// ====================================== End Thanks ============================
+
+// ====================================== Start stripe ============================
+    public function stripe(Request $request)
+    {
+        $id = User::where(['email'=>Session::get('userSession')])->first()->id;
+        DB::table('carts')->where(['user_id'=>$id])->delete();
+
+
+        if($request->isMethod('post'))
+        {
+            $data = $request->all();
+            // echo "<pre>"; print_r($data); die;
+
+            // Set your secret key. Remember to Switch to your live secret key in production!
+            // See your keys here:- https://dashboard.stripe.com/account/apikeys
+
+            \Stripe\Stripe::setApiKey('sk_test_51I42lDHfrmRAqAIlrhreuHmIUWdtDFwreThzuDnN8StuRExI7PhYqdoNk6NBqjIyyXegrPcof3pTe2axD3C9GRAR00Aq9PaH32');
+
+            $token = $_POST['stripeToken'];
+            $charge = \Stripe\charge::Create([
+                                                'shipping' => [
+                                                    'name' => 'Rekha Test',
+                                                    'address' => [
+                                                      'line1' => 'address test',
+                                                      'postal_code' => '12345',
+                                                      'city' => 'San Francisco',
+                                                      'state' => 'CA',
+                                                      'country' => 'US',
+                                                    ],
+                                                  ],                            // end extra
+                                                'amount' => $request->input('total_amount'),
+                                                'currency' => 'usd',
+                                                'description' => $request->input('name'),
+                                                'source' => $token,
+            ]);
+
+            // dd($charge);
+            return redirect()->back()->with('flash_message_success','Your Payment Successfully Done!');
+        }
+        return view('user.stripe');
+    }
+// ====================================== End stripe ============================
 } //main end
 
 

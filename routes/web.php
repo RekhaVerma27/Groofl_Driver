@@ -95,7 +95,13 @@ Route::group(['middleware'=>['UserLogin']],function()
 
 	//Checkout code
 	Route::match(['get','post'],'/checkout-page','UserController@checkoutPage');
-	Route::match(['get','post'],'/order-review','UserController@orderReview');
+	Route::match(['get','post'],'/place-order','UserController@placeOrder');
+
+	//Thanks
+	Route::get('/thanks','UserController@thanks');
+
+	//stripe
+	Route::match(['get','post'],'/stripe','UserController@stripe');
 
 
 
