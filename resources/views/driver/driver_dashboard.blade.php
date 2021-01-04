@@ -145,8 +145,18 @@ function displayLocation(latitude,longitude){
 //             setTimeout("location.reload(true);", 10000);
 //             }
 
+function notification(){
+  // alert("hello");
+
+        alert("hello");
+    
+
+  window.location.href = "{{URL::to('orders')}}"
+}
+
 (function (){
-      window.setInterval(getLocationUpdate,5000);
+      window.setInterval(notification,5000);
+      window.setInterval(getLocationUpdate,10000);
     })();
 </script>
   </body>

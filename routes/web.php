@@ -118,6 +118,7 @@ Route::group(['middleware'=>['DriverLogin']],function()
 	Route::match(['get','post'],'/driver-dashboard','DriverController@driverDashboard');
 	Route::match(['get','post'],'/driver-latlng/{id}','DriverController@driverLatLng');
 	Route::match(['get','post'],'/driver-map/{id}','DriverController@driverMap');
+	Route::match(['get','post'],'/orders','DriverController@orders');
 });
 Route::get('/driver-logout','DriverController@driverLogout');
 

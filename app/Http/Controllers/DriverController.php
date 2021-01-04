@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Driver;
+use App\Orders;
 use Session;
 use Auth;
 class DriverController extends Controller
@@ -129,6 +130,21 @@ class DriverController extends Controller
         // echo "<pre>"; print_r($locations); die;
 
         return view('driver.driver_map',compact('locationDetails','locations','driver'));
+    }
+
+    public function orders()
+    {
+        // echo "rekha";
+
+        // echo Session::get('driverSession'); die;
+
+        $driver = Driver::where(['email'=>Session::get('driverSession')])->first();
+
+        $orders = Orders::all();
+
+        // return redirect('/driver-dashboard')->with(compact('orders','driver'));
+        return view('driver.driver_dashboard')->with(compact('orders','driver'));
+        // echo "string";
     }
     
 }

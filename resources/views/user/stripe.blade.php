@@ -43,13 +43,17 @@
                             <input type="text" name="name" placeholder="Enter Your Name" class="form-control">
                             <b>Card Number</b>
                             <div id="card-element" class="form-control">
-                                
+                              <!-- A Stripe Element will be inserted here. -->
                             </div>
-                          </div>
 
+                            <!-- Used to display form errors. -->
+                            <div id="card-errors" role="alert" ></div>
+                          </div>
+                          
                           <button class="btn btn-success btn-mini" style="float: right; margin-top: 10px;">Submit Payment</button>
+                      
                         </form>
-                        <div id="card-error" role="alert"></div>
+                        
                     </div>
                 </div>
             </div>
