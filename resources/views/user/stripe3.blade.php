@@ -59,13 +59,44 @@
                               <!-- Used to display form errors. -->
                               <div id="card-errors" role="alert" ></div>
                             @endif
-                            
+
+                           {{--<!-- <a onclick="myFunction()">add new</a> -->
+                            <div id="myDIV">
+                              @foreach($cards as $card)
+                              <div>
+                                <input type="radio" class="" name="card" value="{{$card->id}}"> **** {{$card->last4}} &nbsp;&nbsp;{{$card->exp_month}}/{{$card->exp_year}}
+                              </div>
+                              @endforeach
+                              <a onclick="myFunction()">add new</a>
+                            </div>
+                            <div id="myDIV2" style="display: none;">
+                              <div id="card-element" class="form-control">
+                                <!-- A Stripe Element will be inserted here. -->
+                              </div>
+
+                              <!-- Used to display form errors. -->
+                              <div id="card-errors" role="alert" >
+                            </div>--}}
+
+
                           </div>
                           
                           <button class="btn btn-success btn-mini" style="float: right; margin-top: 10px;">Submit Payment</button>
                       
                         </form>
-                        
+                        <script>
+                        function myFunction() {
+                          var x = document.getElementById("myDIV");
+                          var y = document.getElementById("myDIV2");
+                          if (x.style.display === "none") {
+                            x.style.display = "block";
+                            y.style.display = "none";
+                          } else {
+                            x.style.display = "none";
+                            y.style.display = "block";
+                          }
+                        }
+                        </script>
                     </div>
                 </div>
             </div>
@@ -145,7 +176,6 @@
           form.submit();
         }
     </script>
-
 
 @endsection
     

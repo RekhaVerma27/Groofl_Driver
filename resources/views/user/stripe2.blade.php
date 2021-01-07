@@ -4,23 +4,23 @@
 
     <!-- Start Cart  -->
     <div class="cart-box-main">
-      @if(Session::has('flash_message_success'))
-        <div class="alert alert-sm alert-success alert-block" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          <strong>{!! session('flash_message_success') !!}</strong>
-        </div>
-      @endif
+    	@if(Session::has('flash_message_success'))
+    		<div class="alert alert-sm alert-success alert-block" role="alert">
+    			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    				<span aria-hidden="true">&times;</span>
+    			</button>
+    			<strong>{!! session('flash_message_success') !!}</strong>
+    		</div>
+    	@endif
 
-      @if(Session::has('flash_message_error'))
-        <div class="alert alert-sm alert-danger alert-block" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          <strong>{!! session('flash_message_error') !!}</strong>
-        </div>
-      @endif
+    	@if(Session::has('flash_message_error'))
+    		<div class="alert alert-sm alert-danger alert-block" role="alert">
+    			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    				<span aria-hidden="true">&times;</span>
+    			</button>
+    			<strong>{!! session('flash_message_error') !!}</strong>
+    		</div>
+    	@endif
         <div class="cart-box-main">
             <div class="container">
                 <h1 align="center">Thanks For Purchasing With Us!</h1> <br/><br/>
@@ -43,23 +43,28 @@
                             <input type="text" name="name" placeholder="Enter Your Name" class="form-control">
                             <b>Card Number</b>
 
-                            @if(!empty($cards))
-                            
-                              @foreach($cards as $card)
-                              <div>
-                                <input type="radio" class="" name="card" value="{{$card->id}}"> **** {{$card->last4}} &nbsp;&nbsp;{{$card->exp_month}}/{{$card->exp_year}}
-                              </div>
-                              @endforeach
-                              
-                            @else
-                              <div id="card-element" class="form-control">
-                                <!-- A Stripe Element will be inserted here. -->
-                              </div>
+                            {{--<div>used card : {{$kk}}</div>--}}
 
-                              <!-- Used to display form errors. -->
-                              <div id="card-errors" role="alert" ></div>
-                            @endif
-                            
+                           {{--@foreach($kk['data'] as $d)
+                                {{ $d['last4'] }}
+                            @endforeach--}} 
+
+                            <br>
+
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" name="exampleRadios" id="" value="" >
+                              <label class="form-check-label" for="">
+                                **** **** **** {{$k}}
+                              </label>
+                            </div>
+                          
+
+                            <div id="card-element" class="form-control">
+                              <!-- A Stripe Element will be inserted here. -->
+                            </div>
+
+                            <!-- Used to display form errors. -->
+                            <div id="card-errors" role="alert" ></div>
                           </div>
                           
                           <button class="btn btn-success btn-mini" style="float: right; margin-top: 10px;">Submit Payment</button>
@@ -145,7 +150,6 @@
           form.submit();
         }
     </script>
-
 
 @endsection
     

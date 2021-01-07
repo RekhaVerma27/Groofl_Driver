@@ -29,6 +29,7 @@
                         <div class="title-left">
                             <h3>Delivery address</h3>
                         </div>
+                        <a href="{{url('/add-address')}}"><input type="submit" name="submit" value="Add Address"> </a>
                         <form class="needs-validation" novalidate method="post" action="{{url('/place-order')}}">@csrf
                             <div class="mb-3">
                                 <label for="username">Please Choose Delivery Address</label>

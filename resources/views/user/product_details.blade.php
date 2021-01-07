@@ -66,6 +66,8 @@
 				<button class="btn btn-success">Add To Cart</button>
 		</form>
 	</div>
+
 </div>
+<br>
 </div>
 @endsection

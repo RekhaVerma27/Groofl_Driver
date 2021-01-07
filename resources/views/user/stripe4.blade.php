@@ -32,7 +32,7 @@
                             <b>Please Make Payment By Entering Your Credit Or Debit Card</b>
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-6" id="myDIV">
                         <script src="https://js.stripe.com/v3/"></script>
 
                         <form action="/stripe" method="post" id="payment-form">@csrf
@@ -51,14 +51,35 @@
                               </div>
                               @endforeach
                               
-                            @else
+                            @endif
+
+                            <a onclick="myFunction()">add new</a>
+                          </div>
+                          
+                          <button class="btn btn-success btn-mini" style="float: right; margin-top: 10px;">Submit Payment</button>
+                      
+                        </form>
+                        
+                    </div>
+
+                    <div class="col-lg-6" id="myDIV2" style="display: none">
+                        <script src="https://js.stripe.com/v3/"></script>
+
+                        <form action="/stripe" method="post" id="payment-form">@csrf
+                          <div class="form">
+                            <b>Total Amount</b>
+                            <input type="text" name="total_amount" placeholder="Enter Total Amount" class="form-control">
+                            <b>Your Name</b>
+                            <input type="text" name="name" placeholder="Enter Your Name" class="form-control">
+                            <b>Card Number</b><a onclick="myFunction()">previous cards</a>
+
+                           
                               <div id="card-element" class="form-control">
                                 <!-- A Stripe Element will be inserted here. -->
                               </div>
 
                               <!-- Used to display form errors. -->
                               <div id="card-errors" role="alert" ></div>
-                            @endif
                             
                           </div>
                           
@@ -73,7 +94,19 @@
         
     </div>
     <!-- End Cart -->
-
+    <script>
+    function myFunction() {
+      var x = document.getElementById("myDIV");
+      var y = document.getElementById("myDIV2");
+      if (x.style.display === "none") {
+        x.style.display = "block";
+        y.style.display = "none";
+      } else {
+        x.style.display = "none";
+        y.style.display = "block";
+      }
+    }
+    </script>
     <script>
         // Create a Stripe client.
         var stripe = Stripe('pk_test_51I42lDHfrmRAqAIlGhoI0HO5UnKTutRZBv1qjlFRKyaWncz030uuNtJaK5KHBnWv7rbdMNlARz3kZuhaMpt7oreL00y5u7bN4Y');
@@ -145,7 +178,6 @@
           form.submit();
         }
     </script>
-
 
 @endsection
     

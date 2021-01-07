@@ -11,6 +11,8 @@ class DriverController extends Controller
 {
     public function driverLogin(Request $request)
     {
+
+        
     	if($request->isMethod('post'))
     	{
     		$data = $request->input();
@@ -34,6 +36,8 @@ class DriverController extends Controller
                     return redirect()->back()->with('flash_message_error','Waiting for Admin Approval');
                 }
 
+
+
 	             // return redirect('/driver-dashboard')->with(compact('driver'));
 	             return view('driver.driver_dashboard')->with(compact('driver'));
 	         }
@@ -41,6 +45,15 @@ class DriverController extends Controller
 	         {
 	             return redirect('/driver-login')->with('flash_message_error','Invalid Username or Password');
 	         }
+
+             // $order = Orders::all();
+
+             //        if($order!=null)
+             //        {
+             //            // echo "<pre>"; print_r($order)->with('flash_message_success','Successfully'); die;
+             //           echo return view('driver.driver_login')->with('flash_message_success','Successfully'); die;
+             //        }
+
     	}
     	return view('driver.driver_login');
     }
