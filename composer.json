@@ -15,6 +15,7 @@
         "intervention/image": "^2.5",
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",
+        "laravel/ui": "^2.4",
         "realrashid/sweet-alert": "^3.2",
         "stripe/stripe-php": "^7.67"
     },

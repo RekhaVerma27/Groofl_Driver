@@ -3,34 +3,48 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\Notifications\DatabaseNotification;
+use Illuminate\Support\Facades\Notification;
 use App\Driver;
+use App\DriverAcceptedOrder;
+use App\User;
 use App\Orders;
+use App\OrdersProduct;
 use Session;
 use Auth;
+use Illuminate\Support\Facades\Hash;
+
 class DriverController extends Controller
 {
+    // use AuthenticatesUsers; 
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+
     public function driverLogin(Request $request)
     {
+        if($request->isMethod('post'))
+        {
+            $data = $request->input();
+             $driverCount = Driver::where(['email'=>$data['email'],'password'=>md5($data['password'])])->count();
+             // echo "<pre>"; print_r($adminCount); die;
 
-        
-    	if($request->isMethod('post'))
-    	{
-    		$data = $request->input();
-	         $driverCount = Driver::where(['email'=>$data['email'],'password'=>md5($data['password'])])->count();
-	         // echo "<pre>"; print_r($adminCount); die;
+             if($driverCount>0)
+             {
+                // $kk = Auth::guard('driver')->user()->age;
 
-	         if($driverCount>0)
-	         {
-	         	// $kk = Auth::guard('driver')->user()->age;
+                // echo "<pre>"; print_r($kk); die;
+                $driver = Driver::where(['email'=>$data['email'],'password'=>md5($data['password'])])->first();
 
-	         	// echo "<pre>"; print_r($kk); die;
-	         	$driver = Driver::where(['email'=>$data['email'],'password'=>md5($data['password'])])->first();
+                // echo $driver->name; die;
 
-	         	// echo $driver->name; die;
+                // echo "<pre>"; print_r($id); die;
 
-	         	// echo "<pre>"; print_r($id); die;
-
-	            Session::put('driverSession',$data['email']);
+                Session::put('driverSession',$data['email']);
                 if($driver->status == 0)
                 {
                     return redirect()->back()->with('flash_message_error','Waiting for Admin Approval');
@@ -38,13 +52,23 @@ class DriverController extends Controller
 
 
 
-	             // return redirect('/driver-dashboard')->with(compact('driver'));
-	             return view('driver.driver_dashboard')->with(compact('driver'));
-	         }
-	         else
-	         {
-	             return redirect('/driver-login')->with('flash_message_error','Invalid Username or Password');
-	         }
+                // return redirect('/driver-dashboard')->with(compact('driver')); 
+
+                // $user = Driver::where(['email'=>Session::get('driverSession')])->first();
+
+                // foreach ($user->unreadNotifications as $notification) {
+                //     // echo $notification->type;
+                //     // echo $notification->id;
+                //     // echo $notification->data['letter']['title'];
+                // }
+                // die;
+
+                 return view('driver.driver_dashboard')->with(compact('driver'));
+             }
+             else
+             {
+                 return redirect('/driver-login')->with('flash_message_error','Invalid Username or Password');
+             }
 
              // $order = Orders::all();
 
@@ -54,7 +78,8 @@ class DriverController extends Controller
              //           echo return view('driver.driver_login')->with('flash_message_success','Successfully'); die;
              //        }
 
-    	}
+        }  
+    	
     	return view('driver.driver_login');
     }
 
@@ -69,6 +94,7 @@ class DriverController extends Controller
     		$driver->name       = $data['name'];
     		$driver->email      = $data['email'];
     		$driver->password   = md5($data['password']);
+            // $driver->password   = Hash::make($data['password']);
             $driver->latitude   =  '';
             $driver->longitude  =  '';
             $driver->age        = $data['age'];
@@ -90,6 +116,7 @@ class DriverController extends Controller
 
     public function driverLogout()
     {
+        // Auth::guard('driver')->logout();
         Session::forget('driverSession');
         return redirect('/driver-login')->with('flash_message_success','loged out Successfully!!');
     }
@@ -120,6 +147,7 @@ class DriverController extends Controller
                 $driver = Driver::where(['id'=>$id])->first();
                 // echo $loc ; die;
                 // return redirect('home')->with(compact('data'));
+                // echo $kk = Auth::guard('driver')->id; die;
                 return view('driver.driver_dashboard')->with(compact('driver'));
             }
             else
@@ -158,6 +186,76 @@ class DriverController extends Controller
         // return redirect('/driver-dashboard')->with(compact('orders','driver'));
         return view('driver.driver_dashboard')->with(compact('orders','driver'));
         // echo "string";
+    }
+
+    public function markAsRead()
+    {
+        $driver = Driver::where(['email'=>Session::get('driverSession')])->first();
+
+        $driver->unreadNotifications->markAsRead();
+        // return redirect()->back();
+        return view('driver.driver_dashboard')->with(compact('driver'));
+    } 
+
+    public function markAsUnRead()
+    {
+        $driver = Driver::where(['email'=>Session::get('driverSession')])->first();
+
+        // $driver->readNotifications->markAsUnRead();
+        $driver->readNotifications()->update(['read_at' => null]);
+        // return redirect()->back();
+        return view('driver.driver_dashboard')->with(compact('driver'));
+    }
+
+    public function viewNotification(Request $request, $order_id = null, $notificationid=null)
+    {
+        // echo $notificationid; die;
+        $driver = Driver::where(['email'=>Session::get('driverSession')])->first();
+        // echo $order_id; die;
+        $orderDetails = Orders::where(['id'=>$order_id])->first();
+        // echo "<pre>"; print_r($orderDetails); die;
+
+        $orderProducts = OrdersProduct::where(['order_id'=>$order_id])->get();
+        // echo "<pre>"; print_r($orderProducts); die;
+
+        $notification = $driver->notifications()->find($notificationid);
+        if($notification) {
+            $notification->markAsRead();
+        }
+
+        return view('driver.view_notification')->with(compact('driver','orderDetails','orderProducts','notificationid'));
+    }
+
+    public function driverAcceptOrder($order_id = null, $notificationid = null)
+    {
+        // echo "rekha";
+        $driver_id = Driver::where(['email'=>Session::get('driverSession')])->first()->id;
+        // $driver = Driver::where(['email'=>Session::get('driverSession')])->first();
+        
+        // echo $order_id; echo "<br>";
+        // echo $driver_id; die;
+
+        $accept = new DriverAcceptedOrder;
+
+        $accept->order_id = $order_id;
+        $accept->driver_id = $driver_id;
+
+        $accept->save();
+
+        foreach ($driver->notifications as $notification) {
+            $order_id = $notification->data['letter']['body'];
+            
+        }
+
+
+
+        // $notification = $driver->notifications()->find($notificationid);
+        // if($notification) {
+        //     $notification->delete();
+        // }
+
+        echo "string"; die;
+        // return redirect()->back()->compact('driver','order');
     }
     
 }

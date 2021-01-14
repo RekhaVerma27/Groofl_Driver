@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Notifications\DatabaseNotification; 
+use App\Driver;
 use App\User;
 use App\Product;
 use App\Cart;
@@ -14,6 +16,8 @@ use Session;
 use Illuminate\Support\Str;
 use Auth;
 use DB;
+use Illuminate\Support\Facades\Notification;
+
 
 class UserController extends Controller
 {
@@ -423,7 +427,16 @@ class UserController extends Controller
             //Cash on Delivery code
             if($data['payment_method']=="cod")
             {
+                $drivers = Driver::all();
+                $letter = collect([
+                    'title' => 'New Order! check?',
+                    // 'body'  => 'we have updated our TOS and privacy policy, kindly read it!',
+                    'body' =>  $order_id,
+                ]);
+                Notification::send($drivers, new DatabaseNotification($letter));
+
                 return redirect('/thanks');
+                // return redirect('/notify');
             }
             else
             {
@@ -604,6 +617,19 @@ class UserController extends Controller
         return view('user.stripe')->with(compact('cards'));
     }
 // ====================================== End stripe ============================
+
+    public function adminNotify()
+    {
+        $drivers = Driver::all();
+        $letter = collect([
+            'title' => 'New Order is Received',
+            'body'  => 'we have updated our TOS and privacy policy, kindly read it!' 
+        ]);
+        Notification::send($drivers, new DatabaseNotification($letter));
+        echo "Notification Sent to All Users!";
+    }
+
+
 } //main end
 
 

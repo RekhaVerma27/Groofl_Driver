@@ -103,6 +103,9 @@ Route::group(['middleware'=>['UserLogin']],function()
 	//stripe
 	Route::match(['get','post'],'/stripe','UserController@stripe');
 
+	//notification
+	Route::get('notify','UserController@adminNotify');
+
 
 
 });
@@ -119,8 +122,16 @@ Route::group(['middleware'=>['DriverLogin']],function()
 	Route::match(['get','post'],'/driver-latlng/{id}','DriverController@driverLatLng');
 	Route::match(['get','post'],'/driver-map/{id}','DriverController@driverMap');
 	Route::match(['get','post'],'/orders','DriverController@orders');
+
+	Route::match(['get','post'],'/view-notification/{order_id}/{notificationid}','DriverController@viewNotification');
+	Route::match(['get','post'],'/driver-accept-order/{order_id}/{notificationid}','DriverController@driverAcceptOrder');
+
+	Route::get('markasread','DriverController@markAsRead')->name('markAsRead');
+	Route::get('markasunread','DriverController@markAsUnRead')->name('markAsUnRead');
 });
 Route::get('/driver-logout','DriverController@driverLogout');
 
 
+Auth::routes();
 
+Route::get('/home', 'HomeController@index')->name('home');

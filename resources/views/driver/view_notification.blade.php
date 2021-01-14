@@ -78,17 +78,12 @@
         @endif
 
         
-            @foreach($driver->unreadNotifications as $notifications)
+           {{-- @foreach($driver->unreadNotifications as $notifications)
                 <div class="alert alert-sm alert-success alert-block" role="alert">
-
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <a href="{{url('/view-notification/'.$notifications->data['letter']['body'].'/'.$notification->id)}}">
-                  <strong>{{ $notifications->data['letter']['title'] }}</strong>
-                </a>
-                <strong style="float: right; margin-right: 20px;">{{ $notifications->created_at }}</strong>
-               <!-- <a href="{{url('/view-notification/'.$notifications->data['letter']['body'])}}"><button type="button" style="float: right; margin-right: 20px;">view Details</button></a> -->
+                <strong>{{ $notifications->data['letter']['title'] }}</strong>
             </div>
             @endforeach
     
@@ -98,29 +93,88 @@
                 <h4>{{ $readnotifications->data['letter']['title'] }}</h4>
             @endforeach
         </div>
+        --}} <br>
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+                <div class="card-header"><h2>Customer Detail</h2></div>
 
                 <div class="card-body">
-                    <h1>Driver Login</h1>
-                      <form id="form1" method="post">@csrf
+                  <form>
+                    <div class="form-group row">
+                      <label for="staticEmail" class="col-sm-2 col-form-label"><h6>Name</h6></label>
+                      <div class="col-sm-4">
+                        <input type="text" readonly class="form-control-plaintext" value="{{$orderDetails->name}}">
+                      </div>
+                      <label for="staticEmail" class="col-sm-2 col-form-label"><h6>Email</h6></label>
+                      <div class="col-sm-4">
+                        <input type="text" readonly class="form-control-plaintext" value="{{$orderDetails->user_email}}">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <!-- <label for="staticEmail" class="col-sm-2 col-form-label"><h6>Mobile No</h6></label>
+                      <div class="col-sm-4">
+                        <input type="text" readonly class="form-control-plaintext" >
+                      </div> -->
+                      <label for="staticEmail" class="col-sm-2 col-form-label"><h6>Address</h6></label>
+                      <div class="col-sm-10">
+                        <input type="text" readonly class="form-control-plaintext" value="{{$orderDetails->address}}, {{$orderDetails->city}}, {{$orderDetails->state}} {{$orderDetails->pincode}}">
+                      </div>
+                    </div>
+                  </form>
+                </div>
+            </div>
+            <br>
+            <div class="card">
+                <div class="card-header"><h2>Order Detail</h2></div>
 
-                        @if(Session::has('message'))
-                                       {{session('message')}}
-                        @else
+                <div class="card-body">
+                 
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">S.No.</th>
+                        <th scope="col">Item Description</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Unit Price</th>
+                        <th scope="col">Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php $key=1; ?>
+                      @foreach($orderProducts as $orderProduct)
+                      <tr>
+                        <th scope="row">{{$key++}}</th>
+                        <td>{{$orderProduct->product_name}}</td>
+                        <td>{{$orderProduct->product_quantity}}</td>
+                        <td>{{$orderProduct->product_price}}</td>
+                        <td>{{$orderProduct->product_quantity * $orderProduct->product_price}} </td>
+                      </tr>
+                      @endforeach
+                    </tbody>
+                  </table><br>
+                    <div class="form-group row">
+                      <label for="staticEmail" class="col-sm-4 col-form-label"><h6>Sub Total</h6></label>
+                      <div class="col-sm-4">
+                        <input type="text" readonly class="form-control-plaintext" value="Rs. {{$orderDetails->grand_total}}">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="staticEmail" class="col-sm-4 col-form-label"><h6>Delivery Charge</h6> </label>
+                      <div class="col-sm-4">
+                        <input type="text" readonly class="form-control-plaintext" value="Rs. {{$orderDetails->shipping_charges}}">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="staticEmail" class="col-sm-4 col-form-label"><h6>Total Amount</h6></label>
+                      <div class="col-sm-4">
+                        <input type="text" readonly class="form-control-plaintext" value="Rs. {{$orderDetails->grand_total + $orderDetails->shipping_charges}}">
+                      </div>
 
-                         @endif
-                         
-                        Your Latitude : <div id="lat" /></div><br>
-                        Your Longitude : <div id="lng" /></div><br>
+                    </div>
 
-                        <!-- location:<div id="loc">
-                            <input type="hidden" id="latitude1"/>
-                            <input type="hidden" id="longitude2"/>
-                            <input type="hidden" name="{{$driver->id}}"> -->
-                      </form>
+                    <a href="{{url('/driver-accept-order/'.$orderDetails->id.'/'.$notificationid)}}"><input type="submit" name="" value="Accept" class="btn btn-success"></a>
+                      <input type="submit" name="" value="Dismiss" class="btn btn-danger">
                 </div>
             </div>
         </div>
@@ -133,95 +187,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-    <!-- <script src="http://maps.google.com/maps/api/js?key=AIzaSyDOnSELE8sqkY3hOcbmo_w2MjLR3ETHKuM"></script> -->
-    <script src="http://maps.google.com/maps/api/js?key=AIzaSyDOnSELE8sqkY3hOcbmo_w2MjLR3ETHKuM"></script>
-      <script type="text/javascript">
-         var watchID;
-         var geoLoc;
-         var geocoder;
-         function showLocation(position) {
-            var latitude = position.coords.latitude;
-            var longitude = position.coords.longitude;
-            document.getElementById('lat').innerHTML =latitude;
-
-               document.getElementById('lng').innerHTML =longitude;
-               // alert("Test");
-            
-            //displayLocation(latitude, longitude);
-            document.getElementById('form1').action="{{url('/driver-latlng/'.$driver->id)}}?"+"latitude="+latitude+ "&longitude=" +longitude;
-            // alert(document.getElementById('form1').action);
-            document.getElementById('form1').submit();
-
-
-            //alert("Latitude : " + latitude + " Longitude: " + longitude);
-         }
-         function errorHandler(err) {
-            if(err.code == 1) {
-               alert("Error: Access is denied!");
-            } else if( err.code == 2) {
-               alert("Error: Position is unavailable!");
-            }ok
-         }
-         function getLocationUpdate(){
-            if(navigator.geolocation){
-               // timeout at 60000 milliseconds (60 seconds)
-               
-              var options = {timeout:60000};
-               geoLoc = navigator.geolocation;
-               
-               watchID = geoLoc.watchPosition(showLocation, errorHandler, options);
-            } else{
-               alert("Sorry, browser does not support geolocation!");
-            
-         }
-     }
-
-function displayLocation(latitude,longitude){
-  var x=document.getElementById("loc");
-    var geocoder;
-    geocoder = new google.maps.Geocoder();
-    var latlng = new google.maps.LatLng(latitude, longitude);
-
-    geocoder.geocode(
-        {'latLng': latlng}, 
-        function(results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-                if (results[0]) {
-                    var add= results[0].formatted_address ;
-                    var  value=add.split(",");
-
-                    count=value.length;
-                    country=value[count-1];
-                    state=value[count-2];
-                    city=value[count-3];
-                    x.innerHTML = "city name is: " + city;
-                }
-                else  {
-                    x.innerHTML = "address not found";
-                }
-            }
-            else {
-                x.innerHTML = "Geocoder failed due to: " + status;
-            } } );
-  }
-// function autoRefresh() {
-//             getLocationUpdate();
-//             setTimeout("location.reload(true);", 10000);
-//             }
-
-function notification(){
-  // alert("hello");
-
-        alert("hello");
-    
-
-  window.location.href = "{{URL::to('orders')}}"
-}
-
-(function (){
-      // window.setInterval(notification,5000);
-      window.setInterval(getLocationUpdate,10000);
-    })();
-</script>
   </body>
 </html>
