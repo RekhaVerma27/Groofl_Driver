@@ -218,10 +218,10 @@ class DriverController extends Controller
         $orderProducts = OrdersProduct::where(['order_id'=>$order_id])->get();
         // echo "<pre>"; print_r($orderProducts); die;
 
-        $notification = $driver->notifications()->find($notificationid);
-        if($notification) {
-            $notification->markAsRead();
-        }
+        // $notification = $driver->notifications()->find($notificationid);
+        // if($notification) {
+        //     $notification->markAsRead();
+        // }
 
         return view('driver.view_notification')->with(compact('driver','orderDetails','orderProducts','notificationid'));
     }
@@ -230,7 +230,8 @@ class DriverController extends Controller
     {
         // echo "rekha";
         $driver_id = Driver::where(['email'=>Session::get('driverSession')])->first()->id;
-        // $driver = Driver::where(['email'=>Session::get('driverSession')])->first();
+        
+        $drivers = Driver::get();
         
         // echo $order_id; echo "<br>";
         // echo $driver_id; die;
@@ -242,20 +243,45 @@ class DriverController extends Controller
 
         $accept->save();
 
-        foreach ($driver->notifications as $notification) {
-            $order_id = $notification->data['letter']['body'];
-            
-        }
-
-
-
         // $notification = $driver->notifications()->find($notificationid);
         // if($notification) {
         //     $notification->delete();
         // }
 
-        echo "string"; die;
-        // return redirect()->back()->compact('driver','order');
+        foreach ($drivers as $driver){
+            // dd($driver->notifications);die;
+            foreach ($driver->notifications as $notification) {
+                // dd($notification->data);die;
+                $allorderid = $notification->data['letter']['body'];
+                // echo "<pre>"; print_r($notification->data); die;
+
+                if($allorderid==$order_id)
+                {
+                    // echo "true";
+                    // $notification->delete();
+                    $notification->markAsRead();
+                }
+            }
+        }
+        // die;
+
+        // echo "done"; die;
+        $driver = Driver::where(['email'=>Session::get('driverSession')])->first();
+        return view('driver.driver_dashboard')->with(compact('driver'));
     }
     
+    public function driverDismissOrder(Request $request, $order_id = null, $notificationid=null)
+    {
+        // echo $notificationid; echo "<br>"; echo $order_id;
+
+        $driver = Driver::where(['email'=>Session::get('driverSession')])->first();
+
+        $notification = $driver->notifications()->find($notificationid);
+        if($notification) {
+            $notification->markAsRead();
+        }
+
+        return view('driver.driver_dashboard')->with(compact('driver'));
+
+    }
 }

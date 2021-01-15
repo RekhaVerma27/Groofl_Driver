@@ -125,6 +125,7 @@ Route::group(['middleware'=>['DriverLogin']],function()
 
 	Route::match(['get','post'],'/view-notification/{order_id}/{notificationid}','DriverController@viewNotification');
 	Route::match(['get','post'],'/driver-accept-order/{order_id}/{notificationid}','DriverController@driverAcceptOrder');
+	Route::match(['get','post'],'/driver-dismiss-order/{order_id}/{notificationid}','DriverController@driverDismissOrder');
 
 	Route::get('markasread','DriverController@markAsRead')->name('markAsRead');
 	Route::get('markasunread','DriverController@markAsUnRead')->name('markAsUnRead');

@@ -41,6 +41,7 @@
                 {{--{{ $notification->type }}--}}
 
                 {{ $notification->data['letter']['title'] }}
+                
             </a>
             @endforeach
         </div>
@@ -84,8 +85,10 @@
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <a href="{{url('/view-notification/'.$notifications->data['letter']['body'].'/'.$notification->id)}}">
+                <a href="{{url('/view-notification/'.$notifications->data['letter']['body'].'/'.$notifications->id)}}">
                   <strong>{{ $notifications->data['letter']['title'] }}</strong>
+
+                  <strong>Order ID : {{ $notifications->data['letter']['body'] }}</strong>
                 </a>
                 <strong style="float: right; margin-right: 20px;">{{ $notifications->created_at }}</strong>
                <!-- <a href="{{url('/view-notification/'.$notifications->data['letter']['body'])}}"><button type="button" style="float: right; margin-right: 20px;">view Details</button></a> -->
@@ -93,10 +96,10 @@
             @endforeach
     
         <div class="col-md-12">
-            <!-- <h2>Read Notifications</h2> -->
+           {{--<h2>Read Notifications</h2>
             @foreach($driver->readNotifications as $readnotifications)
                 <h4>{{ $readnotifications->data['letter']['title'] }}</h4>
-            @endforeach
+            @endforeach--}}
         </div>
     <div class="row justify-content-center">
         <div class="col-md-8">

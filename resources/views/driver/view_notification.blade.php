@@ -174,7 +174,7 @@
                     </div>
 
                     <a href="{{url('/driver-accept-order/'.$orderDetails->id.'/'.$notificationid)}}"><input type="submit" name="" value="Accept" class="btn btn-success"></a>
-                      <input type="submit" name="" value="Dismiss" class="btn btn-danger">
+                      <a href="{{url('/driver-dismiss-order/'.$orderDetails->id.'/'.$notificationid)}}"><input type="submit" name="" value="Dismiss" class="btn btn-danger"></a>
                 </div>
             </div>
         </div>
