@@ -71,7 +71,7 @@
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
                     <i class="fa fa-bars"></i>
                 </button>
-                    <a class="navbar-brand" href="{{url('/user-dashboard')}}"><h1>REKHA SHOP</h1></a>
+                    <a class="navbar-brand" href="{{url('/user-dashboard')}}"><h1>GWALIOR SHOP</h1></a>
                 </div>
                 <!-- End Header Navigation -->
 
@@ -86,6 +86,7 @@
                             <ul class="dropdown-menu animated fadeOutUp" style="display: none; opacity: 1;">
                                 <li><a href="{{url('/add-address')}}">Add Address</a></li>
                                 <li><a href="{{url('/view-address')}}">List Address</a></li>
+                                <li><a href="{{url('/my-order')}}">My Order</a></li>
                             </ul>
                         </li>
                         

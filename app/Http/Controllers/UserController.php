@@ -399,7 +399,7 @@ class UserController extends Controller
             $order->pincode         = $addressData->pincode;
             $order->coupon_code     = $coupon_code;
             $order->coupon_amount   = $coupon_amount;
-            $order->order_status    = "New";
+            $order->order_status    = "processing";
             $order->payment_method  = $data['payment_method'];
             $order->grand_total     = $data['grand_total'];
 
@@ -627,6 +627,20 @@ class UserController extends Controller
         ]);
         Notification::send($drivers, new DatabaseNotification($letter));
         echo "Notification Sent to All Users!";
+    }
+
+    public function myOrder()
+    {
+        $email = Session::get('userSession');
+
+        $user_id = User::where(['email'=>$email])->first()->id;
+
+        // dd($user->id);
+
+        $orders =  Orders::with('orders')->where(['user_id'=>$user_id])->get();
+
+        // echo "<pre>"; print_r($orders); die;
+        return view('user.my_order')->with(compact('orders'));
     }
 
 

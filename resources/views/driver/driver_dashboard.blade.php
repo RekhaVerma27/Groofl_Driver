@@ -1,5 +1,5 @@
 
-<!doctype html>
+<!-- <!doctype html> -->
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -16,49 +16,8 @@
   </head>
   <body>
 
-  <div class="container">
- 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Navbar</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+    @include('driver.layouts.header')
 
-
-
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          @if($driver->unreadNotifications->count() )
-            <span class="badge badge-danger"> {{$driver->unreadNotifications->count()}}</span>
-            @endif
-            <span><i class="fa fa-bell"></i></span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="btn btn-link"  href="{{route('markAsRead')}}">Mark All as Read</a>
-          @foreach($driver->unreadNotifications as $notification)
-            <a class="dropdown-item">
-                {{--{{ $notification->type }}--}}
-
-                {{ $notification->data['letter']['title'] }}
-                
-            </a>
-            @endforeach
-        </div>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          {{$driver->name}}
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="{{url('/driver-map/'.$driver->id)}}">Driver Map</a>
-          <a class="dropdown-item" href="{{url('/driver-logout')}}">Logout</a>
-        </div>
-      </li>
-    </ul>
-  </div>
-</nav>
-</div>
 <div class="container">
   @if(Session::has('flash_message_success'))
             <div class="alert alert-sm alert-success alert-block" role="alert">
@@ -160,10 +119,10 @@
          }
          function errorHandler(err) {
             if(err.code == 1) {
-               alert("Error: Access is denied!");
+              // alert("Error: Access is denied!");
             } else if( err.code == 2) {
-               alert("Error: Position is unavailable!");
-            }ok
+               //alert("Error: Position is unavailable!");
+            }
          }
          function getLocationUpdate(){
             if(navigator.geolocation){
@@ -227,4 +186,4 @@ function notification(){
     })();
 </script>
   </body>
-</html>
+  </html>

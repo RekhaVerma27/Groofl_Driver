@@ -107,6 +107,7 @@ Route::group(['middleware'=>['UserLogin']],function()
 	Route::get('notify','UserController@adminNotify');
 
 
+	Route::get('/my-order','UserController@myOrder');
 
 });
 Route::get('/user-logout','UserController@userLogout');
@@ -129,6 +130,9 @@ Route::group(['middleware'=>['DriverLogin']],function()
 
 	Route::get('markasread','DriverController@markAsRead')->name('markAsRead');
 	Route::get('markasunread','DriverController@markAsUnRead')->name('markAsUnRead');
+
+	Route::match(['get','post'],'/accepted-orders','DriverController@acceptedOrders');
+	Route::match(['get','post'],'/update-order-status/{id}','DriverController@updateOrderStatus');
 });
 Route::get('/driver-logout','DriverController@driverLogout');
 

@@ -111,7 +111,9 @@ class DriverController extends Controller
 
     public function driverDashboard()
     {
-    	return view('driver.driver_dashboard');
+        // $driver = Driver::where('email'=>Session::get('driverSession'))->first();
+        $driver = Driver::where(['email'=>Session::get('driverSession')])->first();
+    	return view('driver.driver_dashboard')->with(compact('driver'));
     }
 
     public function driverLogout()
@@ -236,12 +238,16 @@ class DriverController extends Controller
         // echo $order_id; echo "<br>";
         // echo $driver_id; die;
 
-        $accept = new DriverAcceptedOrder;
+        // $accept = new DriverAcceptedOrder;
 
-        $accept->order_id = $order_id;
-        $accept->driver_id = $driver_id;
+        // $accept->order_id = $order_id;
+        // $accept->driver_id = $driver_id;
 
-        $accept->save();
+        // $accept->save();
+
+        Orders::where(['id'=>$order_id])->update([
+                                                'driver_id' => $driver_id,
+        ]);
 
         // $notification = $driver->notifications()->find($notificationid);
         // if($notification) {
@@ -283,5 +289,47 @@ class DriverController extends Controller
 
         return view('driver.driver_dashboard')->with(compact('driver'));
 
+    }
+
+    public function acceptedOrders()
+    {
+        $driver = Driver::where(['email'=>Session::get('driverSession')])->first();
+        
+        $driver_id = Driver::where(['email'=>Session::get('driverSession')])->first()->id;
+
+        // $driver->id;
+
+        // $order_ids = DriverAcceptedOrder::where(['driver_id'=>$driver_id])->get('order_id');
+        // // echo "<pre>"; print_r($order_id); die;
+        // foreach($order_ids as $order_id)
+        // {
+        //     $orders  = Orders::where(['id'=>$order_id])->get();
+
+        //     echo "<pre>"; print_r($orders); die;
+        // }
+
+        $orders  = Orders::where(['driver_id'=>$driver_id])->get();
+
+        // echo "<pre>"; print_r($orders); die;
+
+        return view('driver.accepted_orders')->with(compact('driver','orders'));
+    }
+
+    public function updateOrderStatus(Request $request, $id=null)
+    {
+        // echo "rekha";
+        if($request->isMethod('post'))
+        {
+            $data = $request->all();
+            // echo "<pre>"; print_r($data); die;
+
+            Orders::where(['id'=>$id])->update([
+                                                'order_status' => $data['order_status'],
+            ]);
+
+            return redirect()->back()->with('flash_message_success','Order Status Updated!');
+        }
+        
+        return redirect()->back();
     }
 }
