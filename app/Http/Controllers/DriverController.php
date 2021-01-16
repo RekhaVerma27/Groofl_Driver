@@ -285,8 +285,43 @@ class DriverController extends Controller
         $notification = $driver->notifications()->find($notificationid);
         if($notification) {
             $notification->markAsRead();
+            $notification->update(['dismiss'=>1]);
         }
 
+        // for dismiss code
+        $drivers = Driver::all();
+        $drivers_count = Driver::all()->count();
+
+        $dismiss_count=0;
+        foreach($drivers as $driver1)
+        {
+            foreach ($driver1->notifications as $notification) 
+            {
+                $allorderid = $notification->data['letter']['body'];
+                if($allorderid==$order_id && $notification->dismiss==1)
+                {
+                    $dismiss_count++;
+                }
+            }
+        }
+        // echo $count;
+
+        if($dismiss_count==$drivers_count)
+        {
+           foreach($drivers as $driver1)
+           {
+               foreach ($driver1->notifications as $notification) 
+               {
+                   $allorderid = $notification->data['letter']['body'];
+
+                   if($allorderid==$order_id)
+                   {
+                    $notification->update(['dismiss'=>null, 'read_at'=>null]);
+                   }
+               }
+           } 
+        }
+        
         return view('driver.driver_dashboard')->with(compact('driver'));
 
     }
@@ -297,17 +332,6 @@ class DriverController extends Controller
         
         $driver_id = Driver::where(['email'=>Session::get('driverSession')])->first()->id;
 
-        // $driver->id;
-
-        // $order_ids = DriverAcceptedOrder::where(['driver_id'=>$driver_id])->get('order_id');
-        // // echo "<pre>"; print_r($order_id); die;
-        // foreach($order_ids as $order_id)
-        // {
-        //     $orders  = Orders::where(['id'=>$order_id])->get();
-
-        //     echo "<pre>"; print_r($orders); die;
-        // }
-
         $orders  = Orders::where(['driver_id'=>$driver_id])->get();
 
         // echo "<pre>"; print_r($orders); die;
@@ -317,7 +341,6 @@ class DriverController extends Controller
 
     public function updateOrderStatus(Request $request, $id=null)
     {
-        // echo "rekha";
         if($request->isMethod('post'))
         {
             $data = $request->all();

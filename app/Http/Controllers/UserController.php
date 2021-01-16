@@ -385,13 +385,13 @@ class UserController extends Controller
                 $coupon_amount = Session::get('CouponAmount');
             }
 
-            $id = User::where(['email'=>Session::get('userSession')])->first()->id;
+            $user = User::where(['email'=>Session::get('userSession')])->first();
 
             $order = new Orders;
 
-            $order->user_id = $id;
-            // $order->user_email = $user_email;
-            // $order->name = $shippingDetails->name;
+            $order->user_id         = $user->id;
+            $order->user_email      = $user->email;
+            $order->name            = $user->name;
             $order->address         = $addressData->address;
             $order->city            = $addressData->city;
             $order->state           = $addressData->state;
@@ -407,13 +407,13 @@ class UserController extends Controller
 
             $order_id = DB::getPdo()->lastinsertID();
 
-            $cartProducts = DB::table('carts')->where(['user_id'=>$id])->get();
+            $cartProducts = DB::table('carts')->where(['user_id'=>$user->id])->get();
 
             foreach($cartProducts as $pro)
             {
                 $cartPro = new OrdersProduct;
                 $cartPro->order_id = $order_id;
-                $cartPro->user_id = $id;
+                $cartPro->user_id = $user->id;
                 $cartPro->product_id = $pro->product_id;
                 $cartPro->product_name = $pro->product_name;
                 $cartPro->product_price = $pro->product_price;
