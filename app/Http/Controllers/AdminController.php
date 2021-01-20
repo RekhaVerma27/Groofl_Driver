@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Admin;
 use App\Driver;
 use App\User;
+use App\Orders;
 use Auth;
 use Session;
 use Illuminate\Support\Facades\Validator;
@@ -181,5 +182,26 @@ class AdminController extends Controller
     public function autoComplete()
     {
         return view('admin.drivers.auto_complete');
+    }
+
+    public function currentOrders()
+    {
+        $orders = Orders::with('orders')->get();
+        return view('admin.orders.current_orders')->with(compact('orders'));
+    }
+
+    public function pastOrders()
+    {
+        $orders = Orders::with('orders')->get();
+        return view('admin.orders.past_orders')->with(compact('orders'));
+    }
+
+    public function viewOrdersDetails($order_id)
+    {
+        $orderDetails = Orders::with('orders')->where('id',$order_id)->first();
+        $user_id = $orderDetails->user_id;
+        $userDetails = User::where('id',$user_id)->first();
+
+        return view('admin.orders.order_details')->with(compact('orderDetails','userDetails'));
     }
 }

@@ -57,7 +57,7 @@
                         </div>
                         <div class="filter-sidebar-left">
                             <div class="title-left">
-                                <h3>Categories</h3>
+                                <h3>{{__('msg.categories')}}</h3>
                             </div>
                             <div class="list-group list-group-collapse list-group-sm list-group-tree" id="list-group-men" data-children=".sub-men">
                                 @foreach($categories as $cat)
@@ -103,21 +103,21 @@
                                             <div class="products-single fix">
                                                 <div class="box-img-hover">
                                                     <div class="type-lb">
-                                                        <p class="sale">Sale</p>
+                                                        <p class="sale"> {{__('msg.sale')}}</p>
                                                     </div>
-                                                    <img src="upload/product/{{$product->image}}" class="img-fluid" alt="Image">
+                                                    <img src="../upload/product/{{$product->image}}" class="img-fluid" alt="Image">
                                                     <div class="mask-icon">
                                                         <ul>
                                                             <li><a href="#" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
                                                             <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>
                                                             <li><a href="#" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
                                                         </ul>
-                                                        <a class="cart" href="{{url('/product-details/'.$product->id)}}">Details Page</a>
+                                                        <a class="cart" href="{{url('/product-details/'.$product->id)}}"> {{__('msg.details page')}}</a>
                                                     </div>
                                                 </div>
                                                 <div class="why-text">
                                                     <h4>{{$product->product_name}}</h4>
-                                                    <h5>Rs : {{$product->product_price}}</h5>
+                                                    <h5>{{__('msg.Rs')}} : {{$product->product_price}}</h5>
                                                 </div>
                                             </div>
                                         </div>

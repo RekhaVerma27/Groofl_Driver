@@ -27,7 +27,7 @@
     <!-- Responsive CSS -->
     <link rel="stylesheet" href="{{url('user-assets/wayshop/css/responsive.css')}}">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{url('user-assets/wayshop/css/custom.css')}}">
+    <!-- <link rel="stylesheet" href="{{url('user-assets/wayshop/css/custom.css')}}"> -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!--[if lt IE 9]>

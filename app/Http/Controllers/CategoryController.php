@@ -69,13 +69,5 @@ class CategoryController extends Controller
         return redirect()->back();
     }
 
-    public function currentOrders()
-    {
-    	return view('admin.orders.current_orders');
-    }
-
-    public function pastOrders()
-    {
-    	return view('admin.orders.past_orders');
-    }
+    
 }

@@ -16,6 +16,7 @@ use Session;
 use Illuminate\Support\Str;
 use Auth;
 use DB;
+use App;
 use Illuminate\Support\Facades\Notification;
 
 
@@ -70,13 +71,22 @@ class UserController extends Controller
     	return view('user.user_register');
     }
 
-    public function userDashboard()
+    
+
+    public function userDashboard($lang=null)
     {
+        // echo $lang; die;
+        
+
         $products = Product::where(['status'=>1])->get();
         // $categories = Category::where(['status'=>1])->get();
         $categories = Category::with('categories')->where(['parent_id'=>0, 'status'=>1])->get();
         // $products = Products::paginate(2);
         // echo "<pre>"; print_r($categories);die;
+        if(!empty($lang))
+        {
+            App::setLocale($lang);
+        }
 
     	return view('user.user_dashboard',compact('products','categories'));
     }

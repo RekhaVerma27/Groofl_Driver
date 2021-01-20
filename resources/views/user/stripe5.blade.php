@@ -66,20 +66,31 @@
                       
                         </form>  --}}
 
-                        <form action="/stripe" method="post" id="pp"> @csrf
+                        <form action="/stripe" method="post" id="payment-form"> @csrf
+                            
                            <div class="group">
+                               <b>Total Amount</b>
+                            <input type="text" name="total_amount" placeholder="Enter Total Amount" class="form-control">
+                            <b>Your Name</b>
+                            <input type="text" name="name" placeholder="Enter Your Name" class="form-control">
+                            </div>
+                            <b>Card Number</b>
+                            @if(!empty($cards))
                             @foreach($cards as $card)
-                             <label>
+                             <label style="margin-left: -66px;">
                                <span><input type="radio" name="payment-source" value="{{$card->id}}"></span>
                                <div id="saved-card">**** **** **** {{$card->last4}}</div>
                              </label>
                              @endforeach
-                             <div id="pouet">
+                            @endif
+                             <div id="pouet" style="margin-left: -66px;">
                                <span><input type="radio" name="payment-source" value="new-card" id="new-card-radio"></span>
                                <div id="card-element" class="field"></div>      
                              </div>
                            </div>
-                           <input type="submit" name="submit" value="Pay" class="btn btn-success btn-block">
+                           <div style="margin-left: 625px;">
+                               <input type="submit" name="" value="Pay" class="btn btn-success" style="width: 385px;">
+                          </div>
                            <div class="outcome">
                              <div class="error"></div>
                              <div class="success-saved-card">
@@ -100,159 +111,89 @@
     <!-- End Cart -->
 
     <script>
-        // Create a Stripe client.
-        var stripe = Stripe('pk_test_51I42lDHfrmRAqAIlGhoI0HO5UnKTutRZBv1qjlFRKyaWncz030uuNtJaK5KHBnWv7rbdMNlARz3kZuhaMpt7oreL00y5u7bN4Y');
+      var stripe = Stripe('pk_test_51I42lDHfrmRAqAIlGhoI0HO5UnKTutRZBv1qjlFRKyaWncz030uuNtJaK5KHBnWv7rbdMNlARz3kZuhaMpt7oreL00y5u7bN4Y');
+      var elements = stripe.elements();
 
-        // Create an instance of Elements.
-        var elements = stripe.elements();
-
-        // Custom styling can be passed to options when creating an Element.
-        // (Note that this demo uses a wider set of styles than the guide below.)
-        var style = {
+      var card = elements.create('card', {
+        style: {
           base: {
-            color: '#32325d',
-            fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-            fontSmoothing: 'antialiased',
-            fontSize: '16px',
+            iconColor: '#666EE8',
+            color: '#31325F',
+            lineHeight: '40px',
+            fontWeight: 300,
+            fontFamily: 'Helvetica Neue',
+            fontSize: '15px',
+
             '::placeholder': {
-              color: '#aab7c4'
-            }
+              color: '#CFD7E0',
+            },
           },
-          invalid: {
-            color: '#fa755a',
-            iconColor: '#fa755a'
-          }
-        };
-
-        // Create an instance of the card Element.
-        var card = elements.create('card', {style: style});
-
-        // Add an instance of the card Element into the `card-element` <div>.
-        card.mount('#card-element');
-        // Handle real-time validation errors from the card Element.
-        card.on('change', function(event) {
-          var displayError = document.getElementById('card-errors');
-          if (event.error) {
-            displayError.textContent = event.error.message;
-          } else {
-            displayError.textContent = '';
-          }
-        });
-
-        // Handle form submission.
-        var form = document.getElementById('payment-form');
-        form.addEventListener('submit', function(event) {
-          event.preventDefault();
-
-          stripe.createToken(card).then(function(result) {
-            if (result.error) {
-              // Inform the user if there was an error.
-              var errorElement = document.getElementById('card-errors');
-              errorElement.textContent = result.error.message;
-            } else {
-              // Send the token to your server.
-              stripeTokenHandler(result.token);
-            }
-          });
-        });
-
-        // Submit the form with the token ID.
-        function stripeTokenHandler(token) {
-          // Insert the token ID into the form so it gets submitted to the server
-          var form = document.getElementById('payment-form');
-          var hiddenInput = document.createElement('input');
-          hiddenInput.setAttribute('type', 'hidden');
-          hiddenInput.setAttribute('name', 'stripeToken');
-          hiddenInput.setAttribute('value', token.id);
-          form.appendChild(hiddenInput);
-
-          // Submit the form
-          form.submit();
         }
+      });
+      card.mount('#card-element');
+
+      function setOutcome(result) {
+        var successNewCardElement = document.querySelector('.success-new-card');
+        var successSavedCardElement = document.querySelector('.success-saved-card');
+        var errorElement = document.querySelector('.error');
+        successNewCardElement.classList.remove('visible');
+        successSavedCardElement.classList.remove('visible');
+        errorElement.classList.remove('visible');
+        
+        if (result.token) {
+          // Use the token to create a charge or a customer
+          // https://stripe.com/docs/charges
+
+          // document.getElementById("payment-form").submit();
+
+          stripeTokenHandler(result.token);
+
+          // successNewCardElement.querySelector('.token').textContent = result.token.id;
+          // successNewCardElement.classList.add('visible');
+        } else if (result.saved_card) {
+          document.getElementById("payment-form").submit();
+          // successSavedCardElement.querySelector('.saved-card').textContent = result.saved_card;
+          // successSavedCardElement.classList.add('visible');
+        } else if (result.error) {
+          errorElement.textContent = result.error.message;
+          errorElement.classList.add('visible');
+        }
+      }
+
+      // Submit the form with the token ID.
+      function stripeTokenHandler(token) {
+        // Insert the token ID into the form so it gets submitted to the server
+        var form = document.getElementById('payment-form');
+        var hiddenInput = document.createElement('input');
+        hiddenInput.setAttribute('type', 'hidden');
+        hiddenInput.setAttribute('name', 'stripeToken');
+        hiddenInput.setAttribute('value', token.id);
+        form.appendChild(hiddenInput);
+
+        // Submit the form
+        form.submit();
+      }
+
+      card.on('focus', function(event) {
+        document.querySelector('#new-card-radio').checked = true;
+      });
+
+      card.on('change', function(event) {
+        setOutcome(event);
+      });
+
+      document.querySelector('form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        var radioButton = document.querySelector('input[name="payment-source"]:checked');
+        if (radioButton.value == 'new-card') {
+          stripe.createToken(card).then(setOutcome);
+        } else {
+          setOutcome({saved_card: radioButton.value});
+        }
+      });
+
     </script>
-
-<!-- New Card Design -->
-<script>
-  
-  var stripe = Stripe('pk_test_51I42lDHfrmRAqAIlGhoI0HO5UnKTutRZBv1qjlFRKyaWncz030uuNtJaK5KHBnWv7rbdMNlARz3kZuhaMpt7oreL00y5u7bN4Y');
-  var elements = stripe.elements();
-
-  var card = elements.create('card', {
-    style: {
-      base: {
-        iconColor: '#666EE8',
-        color: '#31325F',
-        lineHeight: '40px',
-        fontWeight: 300,
-        fontFamily: 'Helvetica Neue',
-        fontSize: '15px',
-
-        '::placeholder': {
-          color: '#CFD7E0',
-        },
-      },
-    }
-  });
-  card.mount('#card-element');
-
-  function setOutcome(result) {
-    var successNewCardElement = document.querySelector('.success-new-card');
-    var successSavedCardElement = document.querySelector('.success-saved-card');
-    var errorElement = document.querySelector('.error');
-    successNewCardElement.classList.remove('visible');
-    successSavedCardElement.classList.remove('visible');
-    errorElement.classList.remove('visible');
-    
-    if (result.token) {
-      // Use the token to create a charge or a customer
-      // https://stripe.com/docs/charges
-      successNewCardElement.querySelector('.token').textContent = result.token.id; 
-      successNewCardElement.classList.add('visible');
-      // stripeTokenHandler(result.token);
-      //  function stripeTokenHandler(token) {
-      //     // Insert the token ID into the form so it gets submitted to the server
-      //     var form = document.getElementById('pp');
-      //     var hiddenInput = document.createElement('input');
-      //     hiddenInput.setAttribute('type', 'hidden');
-      //     hiddenInput.setAttribute('name', 'stripeToken');
-      //     hiddenInput.setAttribute('value', token.id);
-      //     form.appendChild(hiddenInput);
-
-      //     // Submit the form
-      //     form.submit();
-      //   }
-    } else if (result.saved_card) {
-      successSavedCardElement.querySelector('.saved-card').textContent = result.saved_card;
-      successSavedCardElement.classList.add('visible');
-    } else if (result.error) {
-      errorElement.textContent = result.error.message;
-      errorElement.classList.add('visible');
-    }
-    
-  }
-
-  // Submit the form with the token ID.
-       
-
-  card.on('focus', function(event) {
-    document.querySelector('#new-card-radio').checked = true;
-  });
-
-  card.on('change', function(event) {
-    setOutcome(event);
-  });
-
-  document.querySelector('form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    var radioButton = document.querySelector('input[name="payment-source"]:checked');
-    if (radioButton.value == 'new-card') {
-      stripe.createToken(card).then(setOutcome);
-    } else {
-      setOutcome({saved_card: radioButton.value});
-    }
-  });
-</script>
 
 @endsection
     

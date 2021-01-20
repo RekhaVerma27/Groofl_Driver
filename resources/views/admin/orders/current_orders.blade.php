@@ -49,7 +49,7 @@
                         <!-- Plugin content:powerpoint,txt,pdf,png,word,xl -->
                            <div class="btn-group">
                               <div class="buttonexport" id="buttonlist"> 
-                                 <a class="btn btn-add" href="{{url('/past-orders')}} "> <i class="fa fa-plus"></i> Past Orders
+                                 <a class="btn btn-add" href="{{url('/past-orders')}} "> <i class=""></i> Past Orders
                                  </a>  
                               </div>
                             </div>  
@@ -58,28 +58,41 @@
                                  <thead>
                                     <tr class="info">
                                        <th>Id</th>
+                                       <!-- <th>Customer Name</th> -->
+                                       <!-- <th>Customer Email</th> -->
                                        <th>Order Name</th>
-                                       <th>Order Quantity</th>
+                                       <th>Payment Method</th>
                                        <th>Order Price</th>
-                                       <th>Order Iamge</th>
+                                       <th>Order Date</th>
+                                       <th>Order Status</th>
                                        <th>Action</th>
                                     </tr>
                                  </thead>
                                  <tbody>
-                                  
+                                  @foreach($orders as $order)
+                                  @if($order->order_status != 'Delivered')
                                     <tr>
-                                    <td>1</td>
-                                    <td>Camera</td>
-                                    <td>1</td>
-                                    <td>50,000</td>
-                                    <td>Image</td>
+                                    <td>{{$order->id}}</td>
+                                    <!-- <td>{{$order->name}}</td> -->
+                                    <!-- <td>{{$order->user_email}}</td> -->
+                                    <td>
+                                       @foreach($order->orders as $key=> $orderPro)
+                                          {{$orderPro->product_name}} ({{$orderPro->product_quantity}}) <br>
+                                       @endforeach
+                                    </td>
+                                    <td>{{$order->payment_method}}</td>
+                                    <td>{{$order->grand_total}}</td>
+                                    <td>{{$order->created_at}}</td>
+                                    <td>{{$order->order_status}}</td>
                                   
-                                       <td>
-                                          <a href="" class="btn btn-add btn-sm"><i class="fa fa-pencil"></i></button>
-                                          <a href="" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> </button>
+                                       <td class="text-center">
+                                          <!-- <a href="" class="btn btn-add btn-sm"><i class="fa fa-pencil"></i></a>
+                                          <a href="" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> </a> -->
+                                          <a target="_blank" href="{{ url('orders/'.$order->id) }}" class="btn btn-add btn-sm" >View Order Details</a>
                                        </td>
                                     </tr>
-                                    
+                                 @endif
+                                 @endforeach
                                  </tbody>
                               </table>
                            </div>

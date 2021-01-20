@@ -66,10 +66,13 @@
 		                  		<td>
 		                  			<select name="order_status">
 		                  				<option disabled="">--Select Status--</option>
-		                  				<option value="Processing" @if($order->order_status == 'Processing') selected @endif>Processing</option>
-		                  				<option value="Pick up" @if($order->order_status == 'Pick up') selected @endif>Pick up</option>
-		                  				<option value="On the way" @if($order->order_status == 'On the way') selected @endif>On the way</option>
-		                  				<option value="Delivered" @if($order->order_status == 'Delivered') selected @endif>Delivered</option>
+		                  				<option value="New"        @if($order->order_status == 'New')        selected @endif>New</option>
+		                  				<option value="Pending"    @if($order->order_status == 'Pending')    selected @endif>Pending</option>
+		                  				<option value="In Process" @if($order->order_status == 'In Process') selected @endif>In Process</option>
+		                  				<option value="Shipped"    @if($order->order_status == 'Shipped')    selected @endif>Shipped</option>
+                              <option value="Delivered"  @if($order->order_status == 'Delivered')  selected @endif>Delivered</option>
+                              <option value="Cancelled"  @if($order->order_status == 'Cancelled')  selected @endif>Cancelled</option>
+                              <option value="Paid"       @if($order->order_status == 'Paid')       selected @endif>Paid</option>
 		                  			</select>
 
 		                  			<input type="submit" name="" value="Update Status" class="btn-sm btn-success">

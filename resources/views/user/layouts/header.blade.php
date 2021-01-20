@@ -35,18 +35,28 @@
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                    <div class="custom-select-box">
-                        <select id="basic" class="selectpicker show-tick form-control" data-placeholder="$ USD">
-            <option>$ USD</option>
-          </select>
+                    <div class="custom-select-box bg-light">
+                        
+                        <ul class="navbar-nav ml-auto" style="margin-left: 20px">
+            
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    {{__('msg.language')}} <span class="caret"></span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{url('/user-dashboard/en')}}"> {{__('msg.english')}}</a>
+                                    <a class="dropdown-item" href="{{url('/user-dashboard/hi')}}"> {{__('msg.hindi')}}</a>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                     <div class="right-phone-box">
-                        <p>Call US :- <a href="#"> +91 88712 87268</a></p>
+                        <p>{{__('msg.call us')}} :- <a href="#"> +91 88712 87268</a></p>
                     </div>
                     <div class="our-link">
                         <ul>
-                            <li><a href="{{url('/cart')}}"><i class="fa fa-cart-plus"></i> Cart</a></li>
-                            <li><a href="{{url('/user-logout')}}"><i class="fa fa-cart-plus"></i> logout</a></li>
+                            <li><a href="{{url('/cart')}}"><i class="fa fa-cart-plus"></i> {{__('msg.cart')}}</a></li>
+                            <li><a href="{{url('/user-logout')}}"><i class="fa fa-cart-plus"></i> {{__('msg.logout')}}</a></li>
                             {{--@if(empty(Auth::check()))
                             <li><a href="{{ url('/login-register') }}"><i class="fa fa-lock"></i> Login</a></li>
                             @else
@@ -71,22 +81,22 @@
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu" aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
                     <i class="fa fa-bars"></i>
                 </button>
-                    <a class="navbar-brand" href="{{url('/user-dashboard')}}"><h1>GWALIOR SHOP</h1></a>
+                    <a class="navbar-brand" href="{{url('/user-dashboard')}}"><h1>{{__('msg.gwalior shop')}}</h1></a>
                 </div>
                 <!-- End Header Navigation -->
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="navbar-menu">
                     <ul class="nav navbar-nav ml-auto" data-in="fadeInDown" data-out="fadeOutUp">
-                        <li class="nav-item active"><a class="nav-link" href="{{url('/')}}">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{url('#')}}">About Us</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{url('#')}}">Contact Us</a></li>
+                        <li class="nav-item active"><a class="nav-link" href="{{url('/')}}">{{__('msg.home')}}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{url('#')}}">{{__('msg.about us')}}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{url('#')}}">{{__('msg.contact us')}}</a></li>
                         <li class="dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">MY Account</a>
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{__('msg.my account')}}</a>
                             <ul class="dropdown-menu animated fadeOutUp" style="display: none; opacity: 1;">
-                                <li><a href="{{url('/add-address')}}">Add Address</a></li>
-                                <li><a href="{{url('/view-address')}}">List Address</a></li>
-                                <li><a href="{{url('/my-order')}}">My Order</a></li>
+                                <li><a href="{{url('/add-address')}}">{{__('msg.add address')}}</a></li>
+                                <li><a href="{{url('/view-address')}}">{{__('msg.list address')}}</a></li>
+                                <li><a href="{{url('/my-order')}}">{{__('msg.my order')}}</a></li>
                             </ul>
                         </li>
                         

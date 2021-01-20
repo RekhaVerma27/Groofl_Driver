@@ -17,6 +17,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+
 //Admin Controllers
 Route::match(['get','post'],'/admin-login','AdminController@adminLogin');
 Route::match(['get','post'],'/admin-register','AdminController@adminRegister');
@@ -39,6 +41,11 @@ Route::group(['middleware'=>['AdminLogin']],function()
 	Route::match(['get','post'],'/blocked-users','AdminController@blockedUsers');
 	Route::post('/admin/update-block-user-status','AdminController@updateBlockUserStatus');
 
+	//Order Controller
+	Route::match(['get','post'],'/current-orders','AdminController@currentOrders');
+	Route::match(['get','post'],'/past-orders','AdminController@pastOrders');
+	Route::get('orders/{id}','AdminController@viewOrdersDetails');
+
 
 	//Product Controller
 	Route::match(['get','post'],'/add-product','ProductController@addProduct');
@@ -54,10 +61,7 @@ Route::group(['middleware'=>['AdminLogin']],function()
 	Route::match(['get','post'],'/edit-category/{id}','CategoryController@editCategory');
 	Route::get('/delete-category/{id}','CategoryController@deleteCategory');
 
-	//Order Controller
-	Route::match(['get','post'],'/current-orders','CategoryController@currentOrders');
-	Route::match(['get','post'],'/past-orders','CategoryController@pastOrders');
-
+	
 	//Coupon Controller
 	Route::match(['get','post'],'/add-coupon','CouponsController@addCoupon');
 	Route::match(['get','post'],'/view-coupons','CouponsController@viewCoupons');
@@ -75,6 +79,8 @@ Route::match(['get','post'],'/user-register','UserController@userRegister');
 Route::group(['middleware'=>['UserLogin']],function()
 {
 	Route::match(['get','post'],'/user-dashboard','UserController@userDashboard');
+	Route::match(['get','post'],'/user-dashboard/{lang}','UserController@userDashboard');
+
 	Route::match(['get','post'],'/product-details/{id}','UserController@productDetails');
 	Route::match(['get','post'],'/add-to-cart','UserController@addtoCart');
 	Route::match(['get','post'],'/cart','UserController@cart');
