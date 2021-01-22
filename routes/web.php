@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Http\Request;
+use App\Category;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,8 +21,8 @@ Route::get('/', function () {
 
 
 //Admin Controllers
-Route::match(['get','post'],'/admin-login','AdminController@adminLogin');
-Route::match(['get','post'],'/admin-register','AdminController@adminRegister');
+Route::match(['get','post'],'/admin-login','AdminController@adminLogin')->middleware('RedirectAdminLogin');
+Route::match(['get','post'],'/admin-register','AdminController@adminRegister')->middleware('RedirectAdminLogin');
 
 
 Route::group(['middleware'=>['AdminLogin']],function()
@@ -53,6 +54,23 @@ Route::group(['middleware'=>['AdminLogin']],function()
 	Route::post('/admin/update-product-status','ProductController@updateStatus');
 	Route::get('/delete-product/{id}','ProductController@deleteProduct');
 	Route::match(['get','post'],'/edit-product/{id}','ProductController@editProduct');
+	
+	Route::post('/subcat', function (Request $request) {
+
+	    $parent_id = $request->cat_id;
+	    
+	    // $subcategories = Category::where('id',$parent_id)
+	    //                       ->with('subcategories')
+	    //                       ->get();
+	    $subcategories = Category::where(['id'=>$parent_id, 'status'=>1])
+	    					  ->with('subcategories')
+	                          ->get();
+
+	    return response()->json([
+	        'subcategories' => $subcategories
+	    ]);
+	   
+	})->name('subcat');
 
 	//Category Controller
 	Route::match(['get','post'],'/add-category','CategoryController@addCategory');
@@ -114,6 +132,9 @@ Route::group(['middleware'=>['UserLogin']],function()
 
 
 	Route::get('/my-order','UserController@myOrder');
+
+	//min max price
+	Route::match(['get','post'],'/min-max','UserController@minMax');
 
 });
 Route::get('/user-logout','UserController@userLogout');

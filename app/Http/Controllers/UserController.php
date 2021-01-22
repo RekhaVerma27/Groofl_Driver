@@ -80,7 +80,7 @@ class UserController extends Controller
 
         $products = Product::where(['status'=>1])->get();
         // $categories = Category::where(['status'=>1])->get();
-        $categories = Category::with('categories')->where(['parent_id'=>0, 'status'=>1])->get();
+        $categories = Category::with('subcategories')->where(['parent_id'=>0, 'status'=>1])->get();
         // $products = Products::paginate(2);
         // echo "<pre>"; print_r($categories);die;
         if(!empty($lang))
@@ -89,6 +89,16 @@ class UserController extends Controller
         }
 
     	return view('user.user_dashboard',compact('products','categories'));
+    }
+
+    public function categories($category_id)
+    {
+        // $categories = Category::where(['status'=>1])->get();
+        $categories = Category::with('subcategories')->where(['parent_id'=>0, 'status'=>1])->get();
+        $products = Product::where(['category_id'=>$category_id])->get();
+        $category_name = Category::where(['id'=>$category_id])->first();
+        // return view('user.category_products')->with(compact('categories','products','category_name'));
+        return view('user.user_dashboard')->with(compact('categories','products','category_name'));
     }
 
     public function userLogout()
@@ -143,14 +153,6 @@ class UserController extends Controller
         {
             return redirect('/user-login');
         }
-    }
-
-    public function categories($category_id)
-    {
-        $categories = Category::where(['status'=>1])->get();
-        $products = Product::where(['category_id'=>$category_id])->get();
-        $category_name = Category::where(['id'=>$category_id])->first();
-        return view('user.category_products')->with(compact('categories','products','category_name'));
     }
 
     public function cart(Request $request)
@@ -277,6 +279,10 @@ class UserController extends Controller
                 else
                 {
                     $couponAmount = $total_amount * ($couponDetails->amount/100);
+                }
+
+                if($couponAmount>$total_amount){
+                    return redirect()->back()->with('flash_message_error','Sorry! Your Product Amount is less Comparision to Coupon Amount');
                 }
 
                 // Add Coupon Code in Session
@@ -651,6 +657,26 @@ class UserController extends Controller
 
         // echo "<pre>"; print_r($orders); die;
         return view('user.my_order')->with(compact('orders'));
+    }
+
+    public function minMax(Request $request)
+    {
+
+        if($request->isMethod('post'))
+        {
+            $data = $request->all();
+            // echo "<pre>"; print_r($data);die;
+
+            $min = $data['min'];
+            $max = $data['max'];
+
+            $products = Product::whereBetween('product_price', [$min, $max])->get();
+
+            $categories = Category::with('subcategories')->where(['parent_id'=>0, 'status'=>1])->get();
+
+            return view('user.user_dashboard')->with(compact('products', 'categories'));
+        }
+        
     }
 
 

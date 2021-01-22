@@ -62,12 +62,30 @@
 	                  	   </select> 
 	                  	</div>--}}
 
-	                  	<div class="form-group">
+	                  	{{-- <div class="form-group">
 	                  	    <label>Under Category</label>
 	                  	    <select name="category_id" id="category_id" class="form-control">
 	                  	    	<?php echo $categories_dropdown; ?>
 	                  	    </select>
-	                  	 </div>
+	                  	 </div> --}}
+
+	                  	 <div class="form-group">
+	                    	<label>Category</label>
+                        	<select class="form-control" name="category" id="category">
+                            <!-- <option selected>Select category</option> -->
+                            @foreach ($categories as $item)
+                            <option value="{{ $item->id }}" @if( $item->id == $procat) selected @endif>{{ $item->category_name }}</option>
+                            @endforeach
+                        </select>
+	                    </div>
+	                    
+                      
+                        <div class="form-group">
+	                    	<label>Subcategory</label>
+                        	<select class="form-control" name="subcategory" id="subcategory">
+                            
+                        	</select>
+	                    </div>
 
 	                     <div class="form-group">
 	                        <label>Product Name</label>
@@ -100,5 +118,6 @@
 	   </section>
 	   <!-- /.content -->
 	</div>
+
 	<!-- /.content-wrapper -->
 @endsection

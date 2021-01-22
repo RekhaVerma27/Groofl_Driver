@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Session;
-class AdminLogin
+class RedirectAdminLogin
 {
     /**
      * Handle an incoming request.
@@ -15,9 +15,9 @@ class AdminLogin
      */
     public function handle($request, Closure $next)
     {
-        if(empty(Session::has('adminSession')))
+        if(!empty(Session::has('adminSession')))
         {
-            return redirect('/admin-login');
+            return redirect('/admin-dashboard');
         }
         return $next($request);
     }

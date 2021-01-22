@@ -66,7 +66,7 @@
                                 </a>
                                     <div class="collapse " id="{{$cat->id}}" data-parent="#list-group-men">
                                         <div class="list-group">
-                                            @foreach($cat->categories as $subcat)
+                                            @foreach($cat->subcategories as $subcat)
                                             @if($subcat->status==1)
                                             <a href="{{url('/categories/'.$subcat->id)}}" class="list-group-item list-group-item-action active">{{$subcat->category_name}}</a>
                                             @endif
@@ -76,7 +76,25 @@
                                 </div>
                                 @endforeach
                             </div>
+
                         </div>
+                        <div class="filter-price-left">
+                                <div class="title-left">
+                                    <h3>Price</h3>
+                                </div>
+                                <div class="price-box-slider">
+                                    <!-- <div id="slider-range"></div> -->
+                                    <p>
+                                        <!-- <input type="text" id="amount" readonly style="border:0; color:#fbb714; font-weight:bold;"> -->
+                                        <!-- <input type="range" name=""> -->
+                                        <form action="/min-max" method="post">@csrf
+                                        <input type="text" name="min" placeholder="min">
+                                        <input type="text" name="max" placeholder="max">
+                                        <button class="btn hvr-hover" type="submit">Filter</button>
+                                        </form>
+                                    </p>
+                                </div>
+                            </div>
                     </div>
                 </div>
                 <div class="col-xl-9 col-lg-9 col-sm-12 col-xs-12 shop-content-right">

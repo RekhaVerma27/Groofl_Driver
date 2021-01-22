@@ -8,6 +8,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <title>@yield('title') - Wayshop</title>
       <meta name="csrf-token" content="{{csrf_token()}}">
+        
       <!-- Favicon and touch icons -->
       <link rel="shortcut icon" href="{{url('admin-assets/assets/dist/img/ico/favicon.png')}}" type="image/x-icon">
       <!-- Start Global Mandatory Style
@@ -80,6 +81,7 @@
       <!-- jQuery -->
       <!-- <script src="{{url('admin-assets/assets/plugins/jQuery/jquery-1.12.4.min.js')}}" type="text/javascript"></script> -->
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      
       <!-- jquery-ui --> 
       <script src="{{url('admin-assets/assets/plugins/jquery-ui-1.12.1/jquery-ui.min.js')}}" type="text/javascript"></script>
       <!-- Bootstrap -->
@@ -608,6 +610,122 @@
          }
          dash();         
       </script>
+
+      <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+      <script type="text/javascript">
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $(document).ready(function () {
+             
+                $('#category').on('change',function(e) {
+                 
+                 var cat_id = e.target.value;
+                  alert(cat_id);
+                 $.ajax({
+                       
+                       url:"{{ route('subcat') }}",
+                       type:"POST",
+                       data: {
+                           cat_id: cat_id
+                        },
+                      
+                       success:function (data) {
+
+                        $('#subcategory').empty();
+
+                        $.each(data.subcategories[0].subcategories,function(index,subcategory){
+                            
+                            $('#subcategory').append('<option value="'+subcategory.id+'">'+subcategory.category_name+'</option>');
+                        })
+
+                       }
+                   })
+                });
+
+            });
+        </script>
+
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+      <script type="text/javascript">
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+             function test() {
+            alert("56789");
+                //$('#category').on('click',function(e) {
+                 
+                 var cat_id = "1";
+
+                 $.ajax({
+                       
+                       url:"{{ route('subcat') }}",
+                       type:"POST",
+                       data: {
+                           cat_id: 1
+                        },
+                      
+                       success:function (data) { 
+
+                        $('#subcategory').empty();
+
+                        $.each(data.subcategories[0].subcategories,function(index,subcategory){
+                         
+                            $('#subcategory').append('<option value="'+subcategory.id+'">'+subcategory.category_name+'</option>');
+                            
+                        })
+
+                       }
+                   })
+               // });
+
+            }//);
+        </script>
+
+
+
+        <script type="text/javascript">
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $(document).ready(function () {
+             
+                $('#editcategory').on('click',function(e) {
+                 
+                 var cat_id = e.target.value;
+                  alert("12345");
+                 $.ajax({
+                       
+                       url:"{{ route('subcat') }}",
+                       type:"POST",
+                       data: {
+                           cat_id: 1
+                        },
+                      
+                       success:function (data) {
+
+                        //$('#subcategory').empty();
+
+                        $.each(data.subcategories[0].subcategories,function(index,subcategory){
+                            
+                            $('#subcategory').append('<option value="'+subcategory.id+'">'+subcategory.category_name+'</option>');
+                        })
+
+                       }
+                   })
+                });
+
+            });
+        </script>
 
       <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-toggle/2.2.2/css/bootstrap-toggle.css">
 
