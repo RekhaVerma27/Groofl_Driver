@@ -20,6 +20,7 @@ return [
 	'details page' => "विवरण पृष्ठ",
 	'Rs' => "रु",
 	'categories' => "श्रेणियाँ",
+	'message' => "संदेश",
 ]
 
 

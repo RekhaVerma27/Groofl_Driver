@@ -55,6 +55,7 @@
                     </div>
                     <div class="our-link">
                         <ul>
+                            <li><a href="{{url('/msg')}}"><i class="fas fa-envelope-square"></i> {{__('msg.message')}}</a></li>
                             <li><a href="{{url('/cart')}}"><i class="fa fa-cart-plus"></i> {{__('msg.cart')}}</a></li>
                             <li><a href="{{url('/user-logout')}}"><i class="fa fa-cart-plus"></i> {{__('msg.logout')}}</a></li>
                             {{--@if(empty(Auth::check()))

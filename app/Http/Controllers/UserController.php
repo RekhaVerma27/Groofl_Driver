@@ -679,6 +679,20 @@ class UserController extends Controller
         
     }
 
+    public function message(Request $request)
+    {
+        if($request->isMethod('post'))
+        {
+            $data = $request->all();
+            $msg  = $data['msg'];
+            // echo "<pre>"; print_r($data); die;
+            event(new App\Events\MyEvent($msg));
+            // return "Event has been sent!";
+            return redirect()->back()->with('flash_message_success', 'Your Message has been Sent!');
+        }
+        return view('user.message');
+    }
+
 
 } //main end
 

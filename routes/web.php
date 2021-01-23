@@ -15,7 +15,12 @@ use App\Category;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome2');
+});
+
+Route::get('test', function () {
+    event(new App\Events\MyEvent('welcome2'));
+    return "Event has been sent!";
 });
 
 
@@ -135,6 +140,9 @@ Route::group(['middleware'=>['UserLogin']],function()
 
 	//min max price
 	Route::match(['get','post'],'/min-max','UserController@minMax');
+
+	//Message Route
+	Route::match(['get','post'],'/msg','UserController@message');	
 
 });
 Route::get('/user-logout','UserController@userLogout');

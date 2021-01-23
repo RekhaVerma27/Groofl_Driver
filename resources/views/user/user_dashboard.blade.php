@@ -311,3 +311,22 @@
     </div>
     <!-- End Instagram Feed  -->
 @endsection
+
+</script>
+
+<!-- Push Notification -->
+<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+<script>
+
+  // Enable pusher logging - don't include this in production
+  Pusher.logToConsole = true;
+
+  var pusher = new Pusher('d371c82eb7d13b22666c', {
+    cluster: 'ap2'
+  });
+
+  var channel = pusher.subscribe('my-channel');
+  channel.bind('my-event', function(data) {
+    alert(JSON.stringify(data));
+  });
+</script>

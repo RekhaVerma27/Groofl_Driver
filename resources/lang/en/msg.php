@@ -20,6 +20,7 @@ return [
 	'details page' => "Details Page",
 	'Rs' => "Rs",
 	'categories' => "Categories",
+	'message' => "Message",
 
 
 	
