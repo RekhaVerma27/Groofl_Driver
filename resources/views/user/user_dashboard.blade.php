@@ -1,30 +1,7 @@
+
 @extends('user.layouts.master')
 @section('title','User Dashboard')
 @section('content')
-<!-- Start Slider -->
-    {{--<div id="slides-shop" class="cover-slides">
-        <ul class="slides-container">
-            @foreach($banners as $banner)
-            <li class="{{$banner->text_style}}">
-                <img src="upload/banners/{{$banner->image}}" alt="">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h1 class="m-b-20"><strong>{!!$banner->name!!}</strong></h1>
-                            <p class="m-b-40">{!!$banner->content!!}</p>
-                            <p><a class="btn hvr-hover" href="{{$banner->link}}">Shop New</a></p>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-            </li>
-        </ul>
-        <div class="slides-navigation">
-            <a href="#" class="next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
-            <a href="#" class="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
-        </div>
-    </div>--}}
-    <!-- End Slider -->
 
     <!-- Start Shop Page  -->
     <div class="shop-box-inner">
@@ -312,21 +289,5 @@
     <!-- End Instagram Feed  -->
 @endsection
 
-</script>
 
-<!-- Push Notification -->
-<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
-<script>
 
-  // Enable pusher logging - don't include this in production
-  Pusher.logToConsole = true;
-
-  var pusher = new Pusher('d371c82eb7d13b22666c', {
-    cluster: 'ap2'
-  });
-
-  var channel = pusher.subscribe('my-channel');
-  channel.bind('my-event', function(data) {
-    alert(JSON.stringify(data));
-  });
-</script>

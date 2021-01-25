@@ -18,12 +18,10 @@ Route::get('/', function () {
     return view('welcome2');
 });
 
-Route::get('test', function () {
-    event(new App\Events\MyEvent('welcome2'));
-    return "Event has been sent!";
+Route::get('/clear-cache', function() {
+    Artisan::call('cache:clear');
+    return "Cache is cleared";
 });
-
-
 
 //Admin Controllers
 Route::match(['get','post'],'/admin-login','AdminController@adminLogin')->middleware('RedirectAdminLogin');

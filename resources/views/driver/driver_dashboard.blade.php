@@ -1,23 +1,8 @@
 
-<!-- <!doctype html> -->
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+@extends('driver.layouts.master')
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <!-- Font Awasome -->
-    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <title>Driver Dashoard</title>
-  </head>
-  <body>
-
-    @include('driver.layouts.header')
-
+@section('content') 
 <div class="container">
   @if(Session::has('flash_message_success'))
             <div class="alert alert-sm alert-success alert-block" role="alert">
@@ -89,103 +74,94 @@
     </div>
 </div>
 
-    
+<!-- <script src="http://maps.google.com/maps/api/js?key=AIzaSyDOnSELE8sqkY3hOcbmo_w2MjLR3ETHKuM"></script> -->
+<script src="http://maps.google.com/maps/api/js?key=AIzaSyDOnSELE8sqkY3hOcbmo_w2MjLR3ETHKuM"></script>
+  <script type="text/javascript">
+     var watchID;
+     var geoLoc;
+     var geocoder;
+     function showLocation(position) {
+        var latitude = position.coords.latitude;
+        var longitude = position.coords.longitude;
+        document.getElementById('lat').innerHTML =latitude;
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-    <!-- <script src="http://maps.google.com/maps/api/js?key=AIzaSyDOnSELE8sqkY3hOcbmo_w2MjLR3ETHKuM"></script> -->
-    <script src="http://maps.google.com/maps/api/js?key=AIzaSyDOnSELE8sqkY3hOcbmo_w2MjLR3ETHKuM"></script>
-      <script type="text/javascript">
-         var watchID;
-         var geoLoc;
-         var geocoder;
-         function showLocation(position) {
-            var latitude = position.coords.latitude;
-            var longitude = position.coords.longitude;
-            document.getElementById('lat').innerHTML =latitude;
-
-               document.getElementById('lng').innerHTML =longitude;
-               // alert("Test");
-            
-            //displayLocation(latitude, longitude);
-            document.getElementById('form1').action="{{url('/driver-latlng/'.$driver->id)}}?"+"latitude="+latitude+ "&longitude=" +longitude;
-            // alert(document.getElementById('form1').action);
-            document.getElementById('form1').submit();
+           document.getElementById('lng').innerHTML =longitude;
+           // alert("Test");
+        
+        //displayLocation(latitude, longitude);
+        document.getElementById('form1').action="{{url('/driver-latlng/'.$driver->id)}}?"+"latitude="+latitude+ "&longitude=" +longitude;
+        // alert(document.getElementById('form1').action);
+        document.getElementById('form1').submit();
 
 
-            //alert("Latitude : " + latitude + " Longitude: " + longitude);
-         }
-         function errorHandler(err) {
-            if(err.code == 1) {
-              // alert("Error: Access is denied!");
-            } else if( err.code == 2) {
-               //alert("Error: Position is unavailable!");
-            }
-         }
-         function getLocationUpdate(){
-            if(navigator.geolocation){
-               // timeout at 60000 milliseconds (60 seconds)
-               
-              var options = {timeout:60000};
-               geoLoc = navigator.geolocation;
-               
-               watchID = geoLoc.watchPosition(showLocation, errorHandler, options);
-            } else{
-               alert("Sorry, browser does not support geolocation!");
-            
-         }
+        //alert("Latitude : " + latitude + " Longitude: " + longitude);
      }
+     function errorHandler(err) {
+        if(err.code == 1) {
+          // alert("Error: Access is denied!");
+        } else if( err.code == 2) {
+           //alert("Error: Position is unavailable!");
+        }
+     }
+     function getLocationUpdate(){
+        if(navigator.geolocation){
+           // timeout at 60000 milliseconds (60 seconds)
+           
+          var options = {timeout:60000};
+           geoLoc = navigator.geolocation;
+           
+           watchID = geoLoc.watchPosition(showLocation, errorHandler, options);
+        } else{
+           alert("Sorry, browser does not support geolocation!");
+     }
+    }
 
-function displayLocation(latitude,longitude){
-  var x=document.getElementById("loc");
-    var geocoder;
-    geocoder = new google.maps.Geocoder();
-    var latlng = new google.maps.LatLng(latitude, longitude);
+      function displayLocation(latitude,longitude){
+        var x=document.getElementById("loc");
+          var geocoder;
+          geocoder = new google.maps.Geocoder();
+          var latlng = new google.maps.LatLng(latitude, longitude);
 
-    geocoder.geocode(
-        {'latLng': latlng}, 
-        function(results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-                if (results[0]) {
-                    var add= results[0].formatted_address ;
-                    var  value=add.split(",");
+          geocoder.geocode(
+              {'latLng': latlng}, 
+              function(results, status) {
+                  if (status == google.maps.GeocoderStatus.OK) {
+                      if (results[0]) {
+                          var add= results[0].formatted_address ;
+                          var  value=add.split(",");
 
-                    count=value.length;
-                    country=value[count-1];
-                    state=value[count-2];
-                    city=value[count-3];
-                    x.innerHTML = "city name is: " + city;
-                }
-                else  {
-                    x.innerHTML = "address not found";
-                }
-            }
-            else {
-                x.innerHTML = "Geocoder failed due to: " + status;
-            } } );
-  }
-// function autoRefresh() {
-//             getLocationUpdate();
-//             setTimeout("location.reload(true);", 10000);
-//             }
+                          count=value.length;
+                          country=value[count-1];
+                          state=value[count-2];
+                          city=value[count-3];
+                          x.innerHTML = "city name is: " + city;
+                      }
+                      else  {
+                          x.innerHTML = "address not found";
+                      }
+                  }
+                  else {
+                      x.innerHTML = "Geocoder failed due to: " + status;
+                  } } );
+        }
+      // function autoRefresh() {
+      //             getLocationUpdate();
+      //             setTimeout("location.reload(true);", 10000);
+      //             }
 
-function notification(){
-  // alert("hello");
+      function notification(){
+        // alert("hello");
 
-        alert("hello");
-    
+              alert("hello");
+          
 
-  window.location.href = "{{URL::to('orders')}}"
-}
+        window.location.href = "{{URL::to('orders')}}"
+      }
 
-(function (){
-      // window.setInterval(notification,5000);
-      window.setInterval(getLocationUpdate,10000);
-    })();
+      (function (){
+            // window.setInterval(notification,5000);
+            window.setInterval(getLocationUpdate,10000);
+          })();
 </script>
-  </body>
-  </html>
+
+@endsection
