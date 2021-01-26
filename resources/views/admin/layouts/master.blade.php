@@ -624,7 +624,7 @@
                 $('#category').on('change',function(e) {
                  
                  var cat_id = e.target.value;
-                  alert(cat_id);
+               // alert(cat_id);
                  $.ajax({
                        
                        url:"{{ route('subcat') }}",
@@ -646,82 +646,27 @@
                    })
                 });
 
-            });
-        </script>
-
-        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
-      <script type="text/javascript">
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-             function test() {
-            alert("56789");
-                //$('#category').on('click',function(e) {
-                 
-                 var cat_id = "1";
-
-                 $.ajax({
-                       
-                       url:"{{ route('subcat') }}",
-                       type:"POST",
-                       data: {
-                           cat_id: 1
-                        },
-                      
-                       success:function (data) { 
-
+                // edit cat with sub cat product
+                $('#editcategory').on('click',function(e) {
+                  var link_id = $(this).attr('rel');
+                  alert(link_id);
+                  $.ajax({
+                      url: 'shownew/' + link_id,
+                      type:"POST",
+                      data: {
+                           link_id: link_id
+                      },
+                     success:function (data) {
+                        consol.log(data);
                         $('#subcategory').empty();
 
                         $.each(data.subcategories[0].subcategories,function(index,subcategory){
-                         
-                            $('#subcategory').append('<option value="'+subcategory.id+'">'+subcategory.category_name+'</option>');
-                            
-                        })
-
-                       }
-                   })
-               // });
-
-            }//);
-        </script>
-
-
-
-        <script type="text/javascript">
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $(document).ready(function () {
-             
-                $('#editcategory').on('click',function(e) {
-                 
-                 var cat_id = e.target.value;
-                  alert("12345");
-                 $.ajax({
-                       
-                       url:"{{ route('subcat') }}",
-                       type:"POST",
-                       data: {
-                           cat_id: 1
-                        },
-                      
-                       success:function (data) {
-
-                        //$('#subcategory').empty();
-
-                        $.each(data.subcategories[0].subcategories,function(index,subcategory){
                             
                             $('#subcategory').append('<option value="'+subcategory.id+'">'+subcategory.category_name+'</option>');
                         })
 
                        }
-                   })
+                  });
                 });
 
             });
