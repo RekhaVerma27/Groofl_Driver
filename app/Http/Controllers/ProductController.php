@@ -116,7 +116,8 @@ class ProductController extends Controller
             }
 
             Product::where(['id'=>$id])->update([
-                                                    'category_id'=>$data['category_id'],
+                                                    // 'category_id'=>$data['category_id'],
+                                                    'category_id'=>$data['subcategory'],
                                                     'product_name'=>$data['product_name'],
                                                     'product_quantity'=>$data['product_quantity'],
                                                     'product_price'=>$data['product_price'],
@@ -125,7 +126,10 @@ class ProductController extends Controller
             return redirect('/view-products')->with('flash_message_success','Product has been updated!!');
         }
         $productDetails = Product::where(['id'=>$id])->first();
-        $procat = Category::where(['id'=>$productDetails->category_id])->first()->parent_id;
+
+        $parent_id = Category::where(['id'=>$productDetails->category_id])->first()->parent_id;
+        $subcat_id = Category::where(['id'=>$productDetails->category_id])->first()->id;
+
         // $categories_dropdown = Category::where(['status'=>1])->get();
 
         // Category Dropdown Code
@@ -162,7 +166,7 @@ class ProductController extends Controller
                         $categories_dropdown .="<option value='".$sub_cat->id."' ".$selected.">&nbsp;--&nbsp".$sub_cat->category_name."</option>";
                     } // second foreach end
             } // first foreach end
-        return view('admin.product.edit_product')->with(compact('categories_dropdown','productDetails', 'categories','procat'));
+        return view('admin.product.edit_product')->with(compact('categories_dropdown','productDetails', 'categories','parent_id','subcat_id'));
     }
 
     public function deleteProduct($id=null)

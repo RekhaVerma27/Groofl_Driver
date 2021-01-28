@@ -62,25 +62,6 @@ Route::group(['middleware'=>['AdminLogin']],function()
 
 	    $parent_id = $request->cat_id;
 	    
-	    // $subcategories = Category::where('id',$parent_id)
-	    //                       ->with('subcategories')
-	    //                       ->get();
-	    $subcategories = Category::where(['id'=>$parent_id, 'status'=>1])
-	    					  ->with('subcategories')
-	                          ->get();
-
-	    return response()->json([
-	        'subcategories' => $subcategories
-	    ]);
-	   
-	})->name('subcat');
-
-	Route::post('/shownew/{link_id?}', function (Request $request, $link_id=null) {
-
-	    $parent_id = Category::where(['id'=>$link_id])->first()->parent_id;
-
-	    // echo "string"; die;
-	    
 	    $subcategories = Category::where('id',$parent_id)
 	                          ->with('subcategories')
 	                          ->get();
@@ -92,7 +73,7 @@ Route::group(['middleware'=>['AdminLogin']],function()
 	        'subcategories' => $subcategories
 	    ]);
 	   
-	})->name('shownew');
+	})->name('subcat');
 
 	//Category Controller
 	Route::match(['get','post'],'/add-category','CategoryController@addCategory');

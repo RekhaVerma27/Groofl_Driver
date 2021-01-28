@@ -74,12 +74,13 @@
                         	<select class="form-control" name="category" id="category">
                             <!-- <option selected>Select category</option> -->
                             @foreach ($categories as $item)
-                            <option value="{{ $item->id }}" @if( $item->id == $procat) selected @endif>{{ $item->category_name }}</option>
+                            <option value="{{ $item->id }}" @if($parent_id == $item->id) selected @endif>{{ $item->category_name }}</option>
                             @endforeach
                         </select>
 	                    </div>
 	                    
                       
+	                        <input type="hidden" name="subcat_id" value="{{$subcat_id}}" id="subcat_id" class="form-control">
                         <div class="form-group">
 	                    	<label>Subcategory</label>
                         	<select class="form-control" name="subcategory" id="subcategory">
@@ -121,3 +122,7 @@
 
 	<!-- /.content-wrapper -->
 @endsection
+
+	
+
+        <!-- @if($subcat_id == '+subcategory.id+') selected @endif -->

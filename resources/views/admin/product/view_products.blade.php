@@ -95,7 +95,7 @@
 	                              <td>
 	                                 <!-- <a href="{{ url('admin/add-images/'.$product->id) }}" class="btn btn-info btn-sm" title="Add Images"><i class="fa fa-image"></i></a>
 	                                 <a href="{{ url('admin/add-attributes/'.$product->id) }}" class="btn btn-warning btn-sm" title="Add Product Attributes" ><i class="fa fa-list"></i></a> -->
-	                                 <a id ="editcategory" name="editcategory" href="{{ url('edit-product/'.$product->id) }}" class="btn btn-add btn-sm" title="Edit Product"  ><i class="fa fa-pencil"></i></a>
+	                                 <a href="{{ url('edit-product/'.$product->id) }}" class="btn btn-add btn-sm" title="Edit Product"  ><i class="fa fa-pencil"></i></a>
 	                                 <a href="{{url('/delete-product/'.$product->id)}}" class="btn btn-danger btn-sm" title="Delete Product" ><i class="fa fa-trash-o"></i> </a>
 	                              </td>
 	                           </tr>

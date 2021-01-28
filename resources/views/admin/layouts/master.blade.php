@@ -611,68 +611,69 @@
          dash();         
       </script>
 
-      <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
-      <script type="text/javascript">
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+<script type="text/javascript">
+   $.ajaxSetup({
+       headers: {
+           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+       }
+   });
 
-            $(document).ready(function () {
-             
-                $('#category').on('change',function(e) {
-                 
-                 var cat_id = e.target.value;
-               // alert(cat_id);
-                 $.ajax({
-                       
-                       url:"{{ route('subcat') }}",
-                       type:"POST",
-                       data: {
-                           cat_id: cat_id
-                        },
-                      
-                       success:function (data) {
-
-                        $('#subcategory').empty();
-
-                        $.each(data.subcategories[0].subcategories,function(index,subcategory){
-                            
-                            $('#subcategory').append('<option value="'+subcategory.id+'">'+subcategory.category_name+'</option>');
-                        })
-
-                       }
-                   })
-                });
-
-                // edit cat with sub cat product
-                $('#editcategory').on('click',function(e) {
-                  var link_id = $(this).attr('rel');
-                  alert(link_id);
-                  $.ajax({
-                      url: 'shownew/' + link_id,
-                      type:"POST",
-                      data: {
-                           link_id: link_id
-                      },
-                     success:function (data) {
-                        consol.log(data);
-                        $('#subcategory').empty();
-
-                        $.each(data.subcategories[0].subcategories,function(index,subcategory){
-                            
-                            $('#subcategory').append('<option value="'+subcategory.id+'">'+subcategory.category_name+'</option>');
-                        })
-
-                       }
-                  });
-                });
-
-            });
-        </script>
-
+   $(document).ready(function () {
+    
+      $('#category').on('change',function(e) {
         
+         var cat_id = e.target.value;
+
+         $.ajax({
+              url:"{{ route('subcat') }}",
+              type:"POST",
+              data: {
+                  cat_id: cat_id
+               },
+              success:function (data) {
+               $('#subcategory').empty();
+               $.each(data.subcategories[0].subcategories,function(index,subcategory){
+                   
+                   $('#subcategory').append('<option value="'+subcategory.id+'">'+subcategory.category_name+'</option>');
+               })
+              }
+         })
+       });
+
+
+   //edit 
+   $(document).ready(function () {
+
+      var x = document.getElementById("category").value;
+      var subcategory_val = $("#subcat_id").val();
+      // alert(subcategory_val);
+      console.log(x);
+
+         $.ajax({
+               
+               url:"{{ route('subcat') }}",
+               type:"POST",
+               data: {
+                   cat_id: x
+                },
+              
+               success:function (data) {
+
+                $('#subcategory').empty();
+
+                $.each(data.subcategories[0].subcategories,function(index,subcategory){
+                if(subcategory_val == subcategory.id){ 
+                  $('#subcategory').append('<option value="'+subcategory.id+'" selected>'+subcategory.category_name+'</option>');
+                }else{
+                  $('#subcategory').append('<option value="'+subcategory.id+'">'+subcategory.category_name+'</option>');
+                }
+                })
+               }
+           })
+   });
+   });
+</script>
 
       <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-toggle/2.2.2/css/bootstrap-toggle.css">
 
